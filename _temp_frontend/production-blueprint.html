@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aonware.ai — Production Blueprint v1.0</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg:      #0d1117;
+      --surf:    #161b22;
+      --border:  #21262d;
+      --subtle:  #30363d;
+      --blue:    #5CACF0;
+      --indigo:  #7c6bc9;
+      --emerald: #3ddba8;
+      --amber:   #f0a83e;
+      --red:     #f87171;
+      --muted:   #8b949e;
+      --dim:     #484f58;
+      --text:    #e6edf3;
+      --text2:   #c9d1d9;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.7;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--subtle); border-radius: 3px; }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 100;
+      background: linear-gradient(90deg, var(--indigo), var(--blue));
+      transition: width 0.1s linear; width: 0%;
+    }
+
+    /* ── Nav ── */
+    .nav-glass {
+      backdrop-filter: blur(14px);
+      background: rgba(13,17,23,0.9);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Layout ── */
+    .doc-layout { display: grid; grid-template-columns: 240px 1fr; gap: 0; min-height: 100vh; }
+    @media (max-width: 1024px) { .doc-layout { grid-template-columns: 1fr; } }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: sticky; top: 57px; height: calc(100vh - 57px);
+      overflow-y: auto; padding: 2rem 1.25rem;
+      border-right: 1px solid var(--border);
+    }
+    @media (max-width: 1024px) { .sidebar { display: none; } }
+
+    .sidebar-link {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      color: var(--muted); text-decoration: none;
+      padding: 0.3rem 0.5rem; border-radius: 4px;
+      border-left: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      line-height: 1.4;
+    }
+    .sidebar-link:hover { color: var(--blue); border-color: var(--blue); background: rgba(92,172,240,0.05); }
+    .sidebar-link.active { color: var(--blue); border-color: var(--blue); background: rgba(92,172,240,0.07); }
+    .sidebar-phase { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; margin: 1rem 0 0.4rem 0.5rem; }
+
+    /* ── Article ── */
+    .article { max-width: 820px; padding: 3rem 3rem 6rem; }
+    @media (max-width: 768px) { .article { padding: 1.5rem 1.25rem 4rem; } }
+
+    /* ── Section anchors ── */
+    section { scroll-margin-top: 80px; }
+
+    /* ── Phase header ── */
+    .phase-header {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;
+      border: 1px solid;
+    }
+    .phase-num {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      font-weight: 700; padding: 0.3rem 0.6rem; border-radius: 4px;
+      letter-spacing: 0.05em; white-space: nowrap; margin-top: 0.15rem;
+    }
+
+    /* ── Headings ── */
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 700; color: var(--text); }
+    h2 { font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 700; color: var(--text);
+         margin: 2.5rem 0 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    h2::before { content: '##'; color: var(--blue); font-size: 0.82em; }
+    h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 600; color: var(--text);
+         margin: 1.75rem 0 0.65rem; }
+    h3::before { content: '### '; color: var(--indigo); font-size: 0.82em; }
+
+    p { color: var(--text2); font-size: 0.9rem; margin-bottom: 1rem; }
+    strong { color: var(--text); font-weight: 600; }
+    em { color: var(--muted); }
+
+    /* ── Lists ── */
+    ul, ol { margin: 0 0 1.2rem; padding: 0; list-style: none; }
+    ul li, ol li {
+      position: relative; padding-left: 1.5rem; color: var(--text2);
+      font-size: 0.88rem; line-height: 1.85; margin-bottom: 0.3rem;
+    }
+    ul li::before { content: '→'; position: absolute; left: 0; color: var(--emerald); font-family: 'JetBrains Mono', monospace; font-size: 0.78em; top: 0.2rem; }
+    ol { counter-reset: ol-counter; }
+    ol li::before { content: counter(ol-counter) '.'; counter-increment: ol-counter; position: absolute; left: 0; color: var(--blue); font-family: 'JetBrains Mono', monospace; font-size: 0.78em; font-weight: 600; top: 0.1rem; }
+
+    /* ── Code inline ── */
+    code {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78em;
+      background: rgba(92,172,240,0.1); color: var(--blue);
+      padding: 0.12em 0.4em; border-radius: 3px;
+    }
+
+    /* ── Code block ── */
+    .code-block {
+      background: #0d1117; border: 1px solid var(--subtle);
+      border-radius: 10px; margin: 1.25rem 0; overflow: hidden;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; line-height: 1.7;
+    }
+    .code-block-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.4rem 1rem; border-bottom: 1px solid var(--subtle);
+      background: rgba(48,54,61,0.5);
+    }
+    .code-block-hdr .dots { display: flex; gap: 5px; }
+    .code-block-hdr .dots span { width: 9px; height: 9px; border-radius: 50%; }
+    .code-block-hdr .lang { font-size: 0.66rem; color: var(--muted); }
+    .code-block pre { padding: 0.85rem 1rem; overflow-x: auto; color: var(--text2); white-space: pre; }
+    .tok-kw  { color: #ff7b72; }
+    .tok-str { color: #a5d6ff; }
+    .tok-cm  { color: var(--dim); font-style: italic; }
+    .tok-cls { color: #ffa657; }
+    .tok-fn  { color: #d2a8ff; }
+    .tok-num { color: #f0883e; }
+    .tok-dec { color: #79c0ff; }
+
+    /* ── Info / warning / tip boxes ── */
+    .callout {
+      border-left: 3px solid; border-radius: 0 8px 8px 0;
+      padding: 0.85rem 1rem; margin: 1.25rem 0; font-size: 0.87rem;
+    }
+    .callout p { margin: 0; font-size: 0.87rem; }
+    .callout-info    { border-color: var(--blue);    background: rgba(92,172,240,0.07);  }
+    .callout-warn    { border-color: var(--amber);   background: rgba(240,168,62,0.07);  }
+    .callout-success { border-color: var(--emerald); background: rgba(61,219,168,0.07);  }
+    .callout-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.35rem;
+    }
+
+    /* ── Table ── */
+    .doc-table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.83rem; }
+    .doc-table th {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em;
+      padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left;
+    }
+    .doc-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+    .doc-table tr:last-child td { border-bottom: none; }
+    .doc-table tr:hover td { background: rgba(92,172,240,0.03); }
+
+    /* ── Decision badge ── */
+    .decision {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600;
+      padding: 0.2rem 0.55rem; border-radius: 999px; border: 1px solid;
+    }
+    .decision-chosen { color: var(--emerald); border-color: rgba(61,219,168,0.4); background: rgba(61,219,168,0.08); }
+    .decision-alt    { color: var(--dim);     border-color: var(--border);         background: transparent; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: linear-gradient(90deg, var(--indigo), var(--blue), transparent); margin: 3rem 0; }
+
+    /* ── File tree ── */
+    .filetree {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; line-height: 1.9;
+      background: var(--surf); border: 1px solid var(--border); border-radius: 10px;
+      padding: 1rem 1.25rem; margin: 1.25rem 0; overflow-x: auto;
+    }
+    .ft-dir  { color: var(--blue); }
+    .ft-file { color: var(--text2); }
+    .ft-new  { color: var(--emerald); }
+    .ft-mod  { color: var(--amber); }
+    .ft-cm   { color: var(--dim); }
+
+    /* ── Architecture diagram (ASCII) ── */
+    .arch-diagram {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.73rem; line-height: 1.8;
+      background: var(--surf); border: 1px solid var(--border); border-radius: 10px;
+      padding: 1.25rem 1.5rem; margin: 1.25rem 0; overflow-x: auto; color: var(--text2);
+    }
+    .arch-diagram .highlight { color: var(--blue); }
+    .arch-diagram .dim       { color: var(--dim); }
+    .arch-diagram .green     { color: var(--emerald); }
+    .arch-diagram .purple    { color: var(--indigo); }
+    .arch-diagram .amber     { color: var(--amber); }
+
+    /* ── TOC doc-info strip ── */
+    .doc-meta {
+      display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;
+      padding: 0.85rem 1rem; border-radius: 8px; margin-bottom: 2.5rem;
+      background: var(--surf); border: 1px solid var(--border);
+    }
+    .doc-meta-item { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); }
+    .doc-meta-item span { color: var(--text); }
+
+    /* Phase color variants */
+    .phase-1 { border-color: rgba(92,172,240,0.3);  background: rgba(92,172,240,0.05);  }
+    .phase-2 { border-color: rgba(61,219,168,0.3);  background: rgba(61,219,168,0.05);  }
+    .phase-3 { border-color: rgba(124,107,201,0.3); background: rgba(124,107,201,0.05); }
+    .phase-4 { border-color: rgba(240,168,62,0.3);  background: rgba(240,168,62,0.05);  }
+    .phase-num-1 { color: var(--blue);    background: rgba(92,172,240,0.12);  border: 1px solid rgba(92,172,240,0.3);  }
+    .phase-num-2 { color: var(--emerald); background: rgba(61,219,168,0.12);  border: 1px solid rgba(61,219,168,0.3);  }
+    .phase-num-3 { color: var(--indigo);  background: rgba(124,107,201,0.12); border: 1px solid rgba(124,107,201,0.3); }
+    .phase-num-4 { color: var(--amber);   background: rgba(240,168,62,0.12);  border: 1px solid rgba(240,168,62,0.3);  }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fadeUp 0.5s ease both; }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav-glass sticky top-0 z-50">
+  <div class="px-5 py-3.5 flex items-center justify-between max-w-7xl mx-auto">
+    <div class="flex items-center gap-3">
+      <a href="aonware-index.html" class="font-mono text-xs border rounded px-2 py-0.5 transition-colors"
+         style="color:var(--dim);border-color:var(--subtle)" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--dim)'">&lt; aonware.ai /&gt;</a>
+      <span style="color:var(--border)">/</span>
+      <span class="font-mono text-xs" style="color:var(--muted)">production-blueprint.html</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="font-mono text-xs px-2 py-0.5 rounded" style="color:var(--emerald);background:rgba(61,219,168,0.1);border:1px solid rgba(61,219,168,0.3)">v1.0.0</span>
+      <span class="font-mono text-xs" style="color:var(--dim)">02.05.2026</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ BODY ═══ -->
+<div class="doc-layout max-w-7xl mx-auto">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <p class="font-mono mb-4" style="font-size:0.62rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase">// Navigation</p>
+
+    <a href="#overview"  class="sidebar-link">Overview</a>
+    <a href="#decisions" class="sidebar-link">Key Decisions</a>
+
+    <div class="sidebar-phase">Phase 1 — Django</div>
+    <a href="#p1-structure" class="sidebar-link">1.1 File Structure</a>
+    <a href="#p1-static"    class="sidebar-link">1.2 Static Files</a>
+    <a href="#p1-templates" class="sidebar-link">1.3 Templates</a>
+    <a href="#p1-settings"  class="sidebar-link">1.4 Settings</a>
+    <a href="#p1-order"     class="sidebar-link">1.5 Execution Order</a>
+
+    <div class="sidebar-phase">Phase 2 — Comments API</div>
+    <a href="#p2-model"      class="sidebar-link">2.1 Comment Model</a>
+    <a href="#p2-schema"     class="sidebar-link">2.2 Ninja Schema</a>
+    <a href="#p2-endpoints"  class="sidebar-link">2.3 Endpoints</a>
+    <a href="#p2-validation" class="sidebar-link">2.4 Validation</a>
+
+    <div class="sidebar-phase">Phase 3 — Pagination</div>
+    <a href="#p3-strategy"  class="sidebar-link">3.1 Strategy</a>
+    <a href="#p3-backend"   class="sidebar-link">3.2 Backend</a>
+    <a href="#p3-frontend"  class="sidebar-link">3.3 Frontend JS</a>
+
+    <div class="sidebar-phase">Phase 4 — Deployment</div>
+    <a href="#p4-stack"    class="sidebar-link">4.1 Stack Overview</a>
+    <a href="#p4-whitenoise" class="sidebar-link">4.2 Whitenoise</a>
+    <a href="#p4-gunicorn" class="sidebar-link">4.3 Gunicorn</a>
+    <a href="#p4-nginx"    class="sidebar-link">4.4 Nginx</a>
+    <a href="#p4-checklist" class="sidebar-link">4.5 Go-Live Checklist</a>
+
+    <div class="sidebar-phase">Appendix</div>
+    <a href="#env"       class="sidebar-link">.env Reference</a>
+    <a href="#risks"     class="sidebar-link">Risk Register</a>
+  </aside>
+
+  <!-- ── Article ── -->
+  <article class="article">
+
+    <!-- ══ TITLE ══ -->
+    <div class="fade-up">
+      <p class="font-mono text-xs mb-3" style="color:var(--dim)">&gt; aonware.ai / docs / blueprint</p>
+      <h1 class="mb-2">Production-Ready Blueprint</h1>
+      <p class="font-mono text-sm mb-6" style="color:var(--blue)">
+        <span style="color:var(--muted)">$ </span>aonware --plan --phase=all --env=production
+      </p>
+
+      <!-- Doc meta -->
+      <div class="doc-meta">
+        <div class="doc-meta-item">author: <span>Aonware Architecture Team</span></div>
+        <div class="doc-meta-item">version: <span>1.0.0</span></div>
+        <div class="doc-meta-item">date: <span>02.05.2026</span></div>
+        <div class="doc-meta-item">status: <span style="color:var(--amber)">AWAITING APPROVAL</span></div>
+        <div class="doc-meta-item">phases: <span>4</span></div>
+        <div class="doc-meta-item">scope: <span>Django · Nginx · Gunicorn · Whitenoise</span></div>
+      </div>
+    </div>
+
+    <!-- ══ OVERVIEW ══ -->
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>This document defines the complete engineering roadmap for migrating the Aonware.ai frontend from standalone HTML files to a fully integrated, production-deployed Django application. It is organized into four sequential phases. <strong>No phase should begin until the previous one is verified.</strong></p>
+
+      <div class="arch-diagram">
+<span class="green">┌─────────────────────────────────────────────────────────────────┐</span>
+<span class="green">│</span>              AONWARE.AI — PRODUCTION ARCHITECTURE              <span class="green">│</span>
+<span class="green">└─────────────────────────────────────────────────────────────────┘</span>
+
+<span class="dim">Internet</span>
+    │
+    ▼
+<span class="amber">┌─────────────┐</span>
+<span class="amber">│    Nginx    │</span>  ← Reverse proxy, SSL termination, static serving
+<span class="amber">└──────┬──────┘</span>
+       │  /api/**  /admin/**  /*  (HTML routes)
+       ▼
+<span class="highlight">┌─────────────┐</span>
+<span class="highlight">│  Gunicorn   │</span>  ← WSGI app server, manages Django workers
+<span class="highlight">└──────┬──────┘</span>
+       │
+       ▼
+<span class="purple">┌─────────────────────────────────────────────────────────┐</span>
+<span class="purple">│                     Django Application                  │</span>
+<span class="purple">│                                                         │</span>
+<span class="purple">│</span>  ┌──────────────┐   ┌──────────────┐  ┌─────────────┐  <span class="purple">│</span>
+<span class="purple">│</span>  <span class="highlight">│  Django      │</span>   <span class="green">│  Ninja API   │</span>  <span class="amber">│ Whitenoise  │</span>  <span class="purple">│</span>
+<span class="purple">│</span>  <span class="highlight">│  Templates   │</span>   <span class="green">│  /api/v1/    │</span>  <span class="amber">│  /static/   │</span>  <span class="purple">│</span>
+<span class="purple">│</span>  └──────────────┘   └──────────────┘  └─────────────┘  <span class="purple">│</span>
+<span class="purple">└─────────────────────────────────────────────────────────┘</span>
+       │
+       ▼
+<span class="green">┌─────────────┐</span>
+<span class="green">│ PostgreSQL  │</span>  ← Primary database (posts, projects, comments, users)
+<span class="green">└─────────────┘</span>
+      </div>
+
+      <div class="callout callout-info">
+        <p class="callout-label" style="color:var(--blue)">// Engineering Principle</p>
+        <p>Each phase has a <strong>clear entry condition</strong> (what must be true before starting) and <strong>exit condition</strong> (what must be verified before proceeding). This document is the contract between planning and execution.</p>
+      </div>
+    </section>
+
+    <!-- ══ KEY DECISIONS ══ -->
+    <section id="decisions">
+      <h2>Key Architectural Decisions</h2>
+      <p>These decisions are locked before execution begins. Each is reasoned against the alternatives.</p>
+
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>Decision</th>
+            <th>Chosen</th>
+            <th>Rejected Alternative</th>
+            <th>Rationale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Static file serving (dev)</td>
+            <td><span class="decision decision-chosen">✓ Whitenoise</span></td>
+            <td><span class="decision decision-alt">Django dev server</span></td>
+            <td>Works identically in dev and prod; no Nginx needed for statics in early deploy</td>
+          </tr>
+          <tr>
+            <td>Static file serving (prod)</td>
+            <td><span class="decision decision-chosen">✓ Nginx + Whitenoise fallback</span></td>
+            <td><span class="decision decision-alt">S3 / CDN</span></td>
+            <td>Zero extra infrastructure for MVP; CDN can be added later via <code>STATICFILES_STORAGE</code> swap</td>
+          </tr>
+          <tr>
+            <td>Pagination style</td>
+            <td><span class="decision decision-chosen">✓ Cursor-based (Ninja built-in)</span></td>
+            <td><span class="decision decision-alt">Offset pagination</span></td>
+            <td>Stable under concurrent writes; no "phantom row" bugs when new posts arrive mid-scroll</td>
+          </tr>
+          <tr>
+            <td>Comment moderation</td>
+            <td><span class="decision decision-chosen">✓ <code>is_approved</code> flag</span></td>
+            <td><span class="decision decision-alt">Auto-publish all</span></td>
+            <td>Prevents spam on public endpoint; Django Admin approval takes 10 seconds</td>
+          </tr>
+          <tr>
+            <td>Frontend JS bundling</td>
+            <td><span class="decision decision-chosen">✓ Vanilla + Tailwind CDN</span></td>
+            <td><span class="decision decision-alt">Webpack / Vite</span></td>
+            <td>Zero build step, consistent with existing codebase architecture</td>
+          </tr>
+          <tr>
+            <td>WSGI server</td>
+            <td><span class="decision decision-chosen">✓ Gunicorn</span></td>
+            <td><span class="decision decision-alt">uWSGI / Uvicorn</span></td>
+            <td>Mature, Poetry-installable, battle-tested with Django; Uvicorn only needed for async (ASGI)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         PHASE 1
+    ═══════════════════════════════════════════ -->
+    <section id="phase-1">
+      <div class="phase-header phase-1">
+        <span class="phase-num phase-num-1">PHASE 01</span>
+        <div>
+          <p class="font-mono font-bold text-sm mb-1" style="color:var(--blue)">Django File Architecture</p>
+          <p class="text-xs" style="color:var(--muted)">Map HTML/JS/CSS into Django's template and static file system. Entry: all 5 frontend files verified. Exit: <code>python manage.py runserver</code> serves index at <code>/</code> with correct styles.</p>
+        </div>
+      </div>
+
+      <!-- 1.1 -->
+      <section id="p1-structure">
+        <h2>1.1 Target File Structure</h2>
+        <p>Below is the exact target directory layout. <span style="color:var(--emerald)">Green</span> = new files to create. <span style="color:var(--amber)">Amber</span> = files to modify.</p>
+
+        <div class="filetree">
+<span class="ft-dir">aonware_ai/</span>
+├── <span class="ft-dir">aonware_ai/</span>
+│   └── <span class="ft-dir">settings/</span>
+│       ├── <span class="ft-mod">base.py</span>          <span class="ft-cm"># add STATICFILES_DIRS, WHITENOISE</span>
+│       ├── <span class="ft-file">local.py</span>
+│       └── <span class="ft-file">production.py</span>
+│
+├── <span class="ft-dir">core/</span>
+│   ├── <span class="ft-dir">templates/</span>
+│   │   └── <span class="ft-dir">core/</span>
+│   │       ├── <span class="ft-mod">base.html</span>        <span class="ft-cm"># Django master template</span>
+│   │       ├── <span class="ft-mod">index.html</span>       <span class="ft-cm"># extends base.html</span>
+│   │       ├── <span class="ft-new">blog_detail.html</span> <span class="ft-cm"># NEW — extends base.html</span>
+│   │       └── <span class="ft-new">project_detail.html</span> <span class="ft-cm"># NEW — extends base.html</span>
+│   ├── <span class="ft-dir">static/</span>
+│   │   └── <span class="ft-dir">core/</span>
+│   │       ├── <span class="ft-new">js/</span>
+│   │       │   └── <span class="ft-new">base.js</span>       <span class="ft-cm"># moved from root</span>
+│   │       └── <span class="ft-new">css/</span>
+│   │           └── <span class="ft-new">base.css</span>      <span class="ft-cm"># moved from root</span>
+│   ├── <span class="ft-mod">urls.py</span>               <span class="ft-cm"># add blog_detail, project_detail routes</span>
+│   └── <span class="ft-mod">views.py</span>              <span class="ft-cm"># add two new view functions</span>
+│
+├── <span class="ft-dir">blog/</span>
+│   └── <span class="ft-file">...</span>                   <span class="ft-cm"># no changes in Phase 1</span>
+│
+├── <span class="ft-dir">portfolio/</span>
+│   └── <span class="ft-file">...</span>                   <span class="ft-cm"># no changes in Phase 1</span>
+│
+└── <span class="ft-new">staticfiles/</span>              <span class="ft-cm"># auto-generated by collectstatic — NEVER commit</span>
+        </div>
+      </section>
+
+      <!-- 1.2 -->
+      <section id="p1-static">
+        <h2>1.2 Static File Strategy</h2>
+        <p>Django's static file pipeline has two distinct modes that must both be configured correctly.</p>
+
+        <h3>Development (<code>DEBUG=True</code>)</h3>
+        <p>Django's built-in <code>django.contrib.staticfiles</code> serves files from each app's <code>static/</code> subdirectory automatically. <strong>No Nginx needed.</strong> Files are referenced in templates using the <code>{% load static %}</code> tag.</p>
+
+        <h3>Production (<code>DEBUG=False</code>)</h3>
+        <p>Django's dev server does <strong>not</strong> serve static files in production mode. Two things must happen:</p>
+        <ol>
+          <li><code>python manage.py collectstatic</code> copies all static files from every app into <code>STATIC_ROOT</code> (the <code>staticfiles/</code> directory).</li>
+          <li>Whitenoise middleware intercepts static file requests before they reach Django's view layer, serving them directly from <code>STATIC_ROOT</code> — making Nginx optional for static files at the MVP stage.</li>
+        </ol>
+
+        <h3>Settings additions required in <code>base.py</code></h3>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · aonware_ai/settings/base.py</span>
+          </div>
+          <pre><span class="tok-cm"># --- Static files ---</span>
+<span class="tok-dec">STATIC_URL</span>  = <span class="tok-str">'/static/'</span>
+<span class="tok-dec">STATIC_ROOT</span> = <span class="tok-dec">BASE_DIR</span> / <span class="tok-str">'staticfiles'</span>   <span class="tok-cm"># collectstatic target</span>
+<span class="tok-dec">STATICFILES_DIRS</span> = [<span class="tok-dec">BASE_DIR</span> / <span class="tok-str">'core/static'</span>]  <span class="tok-cm"># source lookup</span>
+
+<span class="tok-cm"># Whitenoise — add AFTER SecurityMiddleware</span>
+<span class="tok-dec">MIDDLEWARE</span> = [
+    <span class="tok-str">'django.middleware.security.SecurityMiddleware'</span>,
+    <span class="tok-str">'whitenoise.middleware.WhiteNoiseMiddleware'</span>,  <span class="tok-cm"># ← HERE</span>
+    <span class="tok-str">'django.contrib.sessions.middleware.SessionMiddleware'</span>,
+    <span class="tok-cm"># ... rest unchanged</span>
+]
+
+<span class="tok-cm"># Whitenoise compression + caching</span>
+<span class="tok-dec">STORAGES</span> = {
+    <span class="tok-str">"staticfiles"</span>: {
+        <span class="tok-str">"BACKEND"</span>: <span class="tok-str">"whitenoise.storage.CompressedManifestStaticFilesStorage"</span>,
+    },
+}</pre>
+        </div>
+
+        <div class="callout callout-warn">
+          <p class="callout-label" style="color:var(--amber)">⚠ Critical</p>
+          <p><code>CompressedManifestStaticFilesStorage</code> appends a content hash to every static filename (e.g. <code>base.abc123.js</code>). The <code>{% static %}</code> tag resolves this automatically. <strong>Never hardcode static file paths in templates.</strong></p>
+        </div>
+      </section>
+
+      <!-- 1.3 -->
+      <section id="p1-templates">
+        <h2>1.3 Template Architecture</h2>
+        <p>The Django <code>base.html</code> is fundamentally different from our standalone <code>base.js</code>. The Django template provides the HTML shell; <code>base.js</code> becomes a static asset loaded within it.</p>
+
+        <h3>Django <code>base.html</code> structure</h3>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">django template · core/templates/core/base.html</span>
+          </div>
+          <pre>{% <span class="tok-kw">load</span> static %}
+&lt;!DOCTYPE html&gt;
+&lt;html lang="{% block lang %}tr{% endblock %}" class="dark"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;title&gt;{% block title %}Abdülaziz Öner — Aonware.ai{% endblock %}&lt;/title&gt;
+  &lt;link rel="stylesheet" href="{% static 'core/css/base.css' %}" /&gt;
+  &lt;!-- Tailwind + Google Fonts --&gt;
+  {% block extra_head %}{% endblock %}
+&lt;/head&gt;
+&lt;body class="flex flex-col"&gt;
+
+&lt;div id="progress-bar"&gt;&lt;/div&gt;
+&lt;nav id="ao-nav" class="nav-glass sticky top-0 z-50"&gt;&lt;/nav&gt;
+
+&lt;main class="flex-grow"&gt;
+  {% block content %}{% endblock %}
+&lt;/main&gt;
+
+&lt;footer id="ao-footer"
+  style="border-top:1px solid var(--border);"&gt;
+&lt;/footer&gt;
+
+&lt;!-- Pass Django context to JS --&gt;
+&lt;script&gt;
+  window.DJANGO_CONTEXT = {
+    apiBase:  "{% block api_base %}/api/v1{% endblock %}",
+    slug:     "{% block page_slug %}{% endblock %}",
+    pageType: "{% block page_type %}index{% endblock %}",
+    csrfToken: "{{ csrf_token }}",
+  };
+&lt;/script&gt;
+
+&lt;script src="{% static 'core/js/base.js' %}"&gt;&lt;/script&gt;
+{% block extra_scripts %}{% endblock %}
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+
+        <div class="callout callout-info">
+          <p class="callout-label" style="color:var(--blue)">// Key Insight</p>
+          <p>The <code>window.DJANGO_CONTEXT</code> block is the bridge between the Django template layer and vanilla JS. The JS reads <code>window.DJANGO_CONTEXT.apiBase</code> instead of a hardcoded URL, and <code>window.DJANGO_CONTEXT.slug</code> instead of <code>URLSearchParams</code>. This means the same <code>base.js</code> works in both standalone (from URL) and Django (from context) modes.</p>
+        </div>
+
+        <h3>Required update to <code>base.js</code></h3>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">javascript · core/static/core/js/base.js (modification)</span>
+          </div>
+          <pre><span class="tok-cm">// Replace the hardcoded config with a context-aware fallback:</span>
+<span class="tok-kw">const</span> <span class="tok-dec">ctx</span> = window.DJANGO_CONTEXT || {};
+
+<span class="tok-kw">const</span> AO = window.AO = {
+  API:  ctx.apiBase  || <span class="tok-str">'http://127.0.0.1:8000/api/v1'</span>, <span class="tok-cm">// fallback = standalone</span>
+  CSRF: ctx.csrfToken || <span class="tok-str">''</span>,
+
+  getSlug() {
+    <span class="tok-cm">// Django passes slug via context; standalone uses URL param</span>
+    <span class="tok-kw">return</span> ctx.slug || <span class="tok-kw">new</span> URLSearchParams(location.search).get(<span class="tok-str">'slug'</span>) || <span class="tok-str">''</span>;
+  },
+  <span class="tok-cm">// ... rest unchanged</span>
+};</pre>
+        </div>
+
+        <h3>Child template pattern (<code>blog_detail.html</code>)</h3>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">django template · core/templates/core/blog_detail.html</span>
+          </div>
+          <pre>{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} — Aonware.ai{% endblock %}
+{% block page_slug %}{{ post.slug }}{% endblock %}
+{% block page_type %}blog_detail{% endblock %}
+
+{% block content %}
+  <span class="tok-cm">&lt;!-- The exact HTML body from blog-detail.html,</span>
+<span class="tok-cm">       minus &lt;html&gt;/&lt;head&gt;/&lt;body&gt;/&lt;nav&gt;/&lt;footer&gt; tags --&gt;</span>
+  &lt;div class="max-w-5xl mx-auto px-5 py-12"&gt;
+    &lt;!-- ... --&gt;
+  &lt;/div&gt;
+{% endblock %}
+
+{% block extra_scripts %}
+&lt;script src="{% static 'core/js/blog_detail.js' %}"&gt;&lt;/script&gt;
+{% endblock %}</pre>
+        </div>
+      </section>
+
+      <!-- 1.4 -->
+      <section id="p1-settings">
+        <h2>1.4 URL & View Changes</h2>
+        <p>Two new view functions and URL routes are needed to serve the blog detail and project detail pages.</p>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · core/views.py</span>
+          </div>
+          <pre><span class="tok-kw">from</span> django.shortcuts <span class="tok-kw">import</span> render, get_object_or_404
+<span class="tok-kw">from</span> blog.models      <span class="tok-kw">import</span> <span class="tok-cls">Post</span>
+<span class="tok-kw">from</span> portfolio.models <span class="tok-kw">import</span> <span class="tok-cls">Project</span>
+
+<span class="tok-kw">def</span> <span class="tok-fn">index</span>(request):
+    <span class="tok-kw">return</span> render(request, <span class="tok-str">'core/index.html'</span>)
+
+<span class="tok-kw">def</span> <span class="tok-fn">blog_detail</span>(request, slug):
+    post = get_object_or_404(
+        <span class="tok-cls">Post</span>.objects.prefetch_related(<span class="tok-str">'tags'</span>), slug=slug
+    )
+    <span class="tok-kw">return</span> render(request, <span class="tok-str">'core/blog_detail.html'</span>, {<span class="tok-str">'post'</span>: post})
+
+<span class="tok-kw">def</span> <span class="tok-fn">project_detail</span>(request, slug):
+    project = get_object_or_404(
+        <span class="tok-cls">Project</span>.objects.prefetch_related(<span class="tok-str">'tech_stack'</span>), slug=slug
+    )
+    <span class="tok-kw">return</span> render(request, <span class="tok-str">'core/project_detail.html'</span>, {<span class="tok-str">'project'</span>: project})</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · core/urls.py</span>
+          </div>
+          <pre><span class="tok-kw">from</span> django.urls <span class="tok-kw">import</span> path
+<span class="tok-kw">from</span> .views <span class="tok-kw">import</span> index, blog_detail, project_detail
+
+urlpatterns = [
+    path(<span class="tok-str">''</span>,                      index,          name=<span class="tok-str">'index'</span>),
+    path(<span class="tok-str">'blog/&lt;slug:slug&gt;/'</span>,     blog_detail,    name=<span class="tok-str">'blog_detail'</span>),
+    path(<span class="tok-str">'portfolio/&lt;slug:slug&gt;/'</span>, project_detail, name=<span class="tok-str">'project_detail'</span>),
+]</pre>
+        </div>
+
+        <div class="callout callout-success">
+          <p class="callout-label" style="color:var(--emerald)">✓ SEO Benefit</p>
+          <p>Once Django serves these routes, post and project URLs become clean (<code>/blog/rag-llm-architecture/</code>) instead of <code>blog-detail.html?slug=...</code>. The JS <code>getSlug()</code> function already handles both patterns via the context bridge.</p>
+        </div>
+      </section>
+
+      <!-- 1.5 -->
+      <section id="p1-order">
+        <h2>1.5 Execution Order</h2>
+        <ol>
+          <li>Create <code>core/static/core/js/</code> and <code>core/static/core/css/</code> directories.</li>
+          <li>Move <code>base.js</code> → <code>core/static/core/js/base.js</code>. Move <code>base.css</code> → <code>core/static/core/css/base.css</code>.</li>
+          <li>Update <code>base.js</code> to read from <code>window.DJANGO_CONTEXT</code> (modification shown above).</li>
+          <li>Rewrite <code>core/templates/core/base.html</code> as the Django master template.</li>
+          <li>Refactor <code>index.html</code> → <code>core/templates/core/index.html</code> (strip outer HTML, add <code>{% extends %}</code>).</li>
+          <li>Create <code>blog_detail.html</code> and <code>project_detail.html</code> templates.</li>
+          <li>Update <code>core/views.py</code> and <code>core/urls.py</code>.</li>
+          <li>Add Whitenoise to <code>MIDDLEWARE</code> and <code>STORAGES</code> in <code>base.py</code>.</li>
+          <li>Add <code>whitenoise</code> to <code>pyproject.toml</code> via <code>poetry add whitenoise</code>.</li>
+          <li>Run <code>python manage.py collectstatic --noinput</code> and verify output in <code>staticfiles/</code>.</li>
+          <li><strong>Exit condition:</strong> <code>python manage.py runserver</code> → visit <code>http://127.0.0.1:8000</code> → all styles load, nav renders, API calls work.</li>
+        </ol>
+      </section>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         PHASE 2
+    ═══════════════════════════════════════════ -->
+    <section id="phase-2">
+      <div class="phase-header phase-2">
+        <span class="phase-num phase-num-2">PHASE 02</span>
+        <div>
+          <p class="font-mono font-bold text-sm mb-1" style="color:var(--emerald)">Database & API Expansion</p>
+          <p class="text-xs" style="color:var(--muted)">Introduce the Comment model, migration, Django Ninja schema, and API endpoints. Entry: Phase 1 complete. Exit: <code>POST /api/v1/blog/posts/{slug}/comments</code> returns 201 and comment appears in DB.</p>
+        </div>
+      </div>
+
+      <!-- 2.1 -->
+      <section id="p2-model">
+        <h2>2.1 Comment Model</h2>
+        <p>The <code>Comment</code> model belongs in the <code>blog</code> app, as it is semantically a property of <code>Post</code>. It will extend <code>TimeStampedModel</code> for consistency with the existing architecture.</p>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · blog/models.py (addition)</span>
+          </div>
+          <pre><span class="tok-kw">class</span> <span class="tok-cls">Comment</span>(<span class="tok-cls">TimeStampedModel</span>):
+    <span class="tok-cm">"""
+    A reader comment attached to a Post.
+    Moderated via is_approved flag — only approved comments
+    are exposed by the public API.
+    """</span>
+    post        = models.<span class="tok-cls">ForeignKey</span>(
+                      <span class="tok-cls">Post</span>,
+                      on_delete=models.CASCADE,
+                      related_name=<span class="tok-str">'comments'</span>
+                  )
+    author_name = models.<span class="tok-cls">CharField</span>(max_length=<span class="tok-num">120</span>)
+    email       = models.<span class="tok-cls">EmailField</span>(blank=<span class="tok-kw">True</span>, null=<span class="tok-kw">True</span>)  <span class="tok-cm"># never exposed in API</span>
+    content     = models.<span class="tok-cls">TextField</span>(max_length=<span class="tok-num">2000</span>)
+    is_approved = models.<span class="tok-cls">BooleanField</span>(default=<span class="tok-kw">False</span>)        <span class="tok-cm"># Admin approves</span>
+
+    <span class="tok-kw">class</span> <span class="tok-cls">Meta</span>:
+        ordering = [<span class="tok-str">'created_at'</span>]   <span class="tok-cm"># chronological, oldest first</span>
+        indexes  = [
+            models.<span class="tok-cls">Index</span>(fields=[<span class="tok-str">'post'</span>, <span class="tok-str">'is_approved'</span>]),  <span class="tok-cm"># fast approved lookup</span>
+        ]
+
+    <span class="tok-kw">def</span> <span class="tok-fn">__str__</span>(self):
+        <span class="tok-kw">return</span> <span class="tok-fn">f</span><span class="tok-str">"{self.author_name} on '{self.post.title}'"</span></pre>
+        </div>
+
+        <h3>Relationship diagram</h3>
+        <div class="arch-diagram">
+<span class="green">Post</span>  (blog_post)
+  │  id: UUID  [PK]
+  │  title: CharField
+  │  slug: AutoSlugField
+  │  content_markdown: TextField
+  │  category: FK → Category
+  │  created_at / updated_at
+  │
+  │ 1 : N
+  │
+  ▼
+<span class="highlight">Comment</span>  (blog_comment)
+  id:          UUID  [PK]            <span class="dim">← from TimeStampedModel</span>
+  post:        FK → Post             <span class="dim">← CASCADE delete</span>
+  author_name: CharField(120)
+  email:       EmailField (nullable) <span class="dim">← private, not in API response</span>
+  content:     TextField(2000)
+  is_approved: BooleanField          <span class="dim">← False by default</span>
+  created_at:  DateTimeField
+  updated_at:  DateTimeField
+        </div>
+
+        <div class="callout callout-warn">
+          <p class="callout-label" style="color:var(--amber)">⚠ Privacy Note</p>
+          <p>The <code>email</code> field is stored for admin contact purposes only. It <strong>must never appear</strong> in any API response schema. The <code>CommentOut</code> schema (below) explicitly excludes it.</p>
+        </div>
+
+        <h3>Admin registration</h3>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · blog/admin.py (addition)</span>
+          </div>
+          <pre>@admin.<span class="tok-fn">register</span>(<span class="tok-cls">Comment</span>)
+<span class="tok-kw">class</span> <span class="tok-cls">CommentAdmin</span>(admin.<span class="tok-cls">ModelAdmin</span>):
+    list_display   = [<span class="tok-str">'author_name'</span>, <span class="tok-str">'post'</span>, <span class="tok-str">'is_approved'</span>, <span class="tok-str">'created_at'</span>]
+    list_filter    = [<span class="tok-str">'is_approved'</span>]
+    list_editable  = [<span class="tok-str">'is_approved'</span>]   <span class="tok-cm"># 1-click approve from list view</span>
+    search_fields  = [<span class="tok-str">'author_name'</span>, <span class="tok-str">'post__title'</span>]
+    readonly_fields = [<span class="tok-str">'created_at'</span>, <span class="tok-str">'updated_at'</span>]</pre>
+        </div>
+      </section>
+
+      <!-- 2.2 -->
+      <section id="p2-schema">
+        <h2>2.2 Django Ninja Schema</h2>
+        <p>Three schemas are needed: <code>CommentIn</code> (POST body), <code>CommentOut</code> (GET response), and an inline validation layer.</p>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · api_gateway/api/blog.py (additions)</span>
+          </div>
+          <pre><span class="tok-kw">from</span> pydantic <span class="tok-kw">import</span> field_validator, Field
+<span class="tok-kw">from</span> blog.models <span class="tok-kw">import</span> <span class="tok-cls">Post</span>, <span class="tok-cls">Comment</span>
+<span class="tok-kw">import</span> bleach  <span class="tok-cm"># poetry add bleach</span>
+
+<span class="tok-kw">class</span> <span class="tok-cls">CommentIn</span>(<span class="tok-cls">Schema</span>):
+    <span class="tok-cm">"""Payload accepted from the client."""</span>
+    author_name: str = Field(..., min_length=<span class="tok-num">1</span>, max_length=<span class="tok-num">120</span>)
+    email:       str | <span class="tok-kw">None</span> = Field(<span class="tok-kw">None</span>, max_length=<span class="tok-num">254</span>)
+    content:     str = Field(..., min_length=<span class="tok-num">5</span>, max_length=<span class="tok-num">2000</span>)
+
+    @field_validator(<span class="tok-str">'content'</span>)
+    @classmethod
+    <span class="tok-kw">def</span> <span class="tok-fn">sanitize_content</span>(cls, v: str) -> str:
+        <span class="tok-cm"># Strip all HTML — no XSS via comment content</span>
+        <span class="tok-kw">return</span> bleach.clean(v, tags=[], strip=<span class="tok-kw">True</span>).strip()
+
+    @field_validator(<span class="tok-str">'author_name'</span>)
+    @classmethod
+    <span class="tok-kw">def</span> <span class="tok-fn">sanitize_name</span>(cls, v: str) -> str:
+        <span class="tok-kw">return</span> bleach.clean(v, tags=[], strip=<span class="tok-kw">True</span>).strip()
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">CommentOut</span>(<span class="tok-cls">Schema</span>):
+    <span class="tok-cm">"""Shape returned to the client. Email is intentionally absent."""</span>
+    id:          UUID
+    author_name: str
+    content:     str
+    created_at:  datetime</pre>
+        </div>
+      </section>
+
+      <!-- 2.3 -->
+      <section id="p2-endpoints">
+        <h2>2.3 API Endpoints</h2>
+
+        <table class="doc-table">
+          <thead>
+            <tr><th>Method</th><th>URL</th><th>Auth</th><th>Description</th><th>Response</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>GET</code></td>
+              <td><code>/api/v1/blog/posts/{slug}/comments</code></td>
+              <td>Public</td>
+              <td>List approved comments for a post</td>
+              <td><code>200 List[CommentOut]</code></td>
+            </tr>
+            <tr>
+              <td><code>POST</code></td>
+              <td><code>/api/v1/blog/posts/{slug}/comments</code></td>
+              <td>Public</td>
+              <td>Submit a new comment (pending approval)</td>
+              <td><code>201 CommentOut</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · api_gateway/api/blog.py (endpoint additions)</span>
+          </div>
+          <pre>@router.<span class="tok-fn">get</span>(<span class="tok-str">"/posts/{slug}/comments"</span>, response=List[<span class="tok-cls">CommentOut</span>])
+<span class="tok-kw">def</span> <span class="tok-fn">list_comments</span>(request, slug: str):
+    post = get_object_or_404(<span class="tok-cls">Post</span>, slug=slug)
+    <span class="tok-kw">return</span> post.comments.filter(is_approved=<span class="tok-kw">True</span>).order_by(<span class="tok-str">'created_at'</span>)
+
+
+@router.<span class="tok-fn">post</span>(<span class="tok-str">"/posts/{slug}/comments"</span>,
+           response={<span class="tok-num">201</span>: <span class="tok-cls">CommentOut</span>},
+           summary=<span class="tok-str">"Submit a comment (pending moderation)"</span>)
+<span class="tok-kw">def</span> <span class="tok-fn">create_comment</span>(request, slug: str, payload: <span class="tok-cls">CommentIn</span>):
+    post = get_object_or_404(<span class="tok-cls">Post</span>, slug=slug)
+    comment = <span class="tok-cls">Comment</span>.objects.create(
+        post=post,
+        author_name=payload.author_name,
+        email=payload.email,
+        content=payload.content,
+        is_approved=<span class="tok-kw">False</span>,   <span class="tok-cm"># always starts unapproved</span>
+    )
+    <span class="tok-kw">return</span> <span class="tok-num">201</span>, comment</pre>
+        </div>
+      </section>
+
+      <!-- 2.4 -->
+      <section id="p2-validation">
+        <h2>2.4 Validation Layer Summary</h2>
+        <p>Validation happens at three levels, providing defense in depth:</p>
+
+        <table class="doc-table">
+          <thead>
+            <tr><th>Level</th><th>Where</th><th>What it catches</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 — Schema</td>
+              <td>Pydantic / <code>CommentIn</code></td>
+              <td>Type errors, length violations, missing required fields</td>
+            </tr>
+            <tr>
+              <td>2 — Sanitization</td>
+              <td><code>field_validator</code> + <code>bleach</code></td>
+              <td>XSS via HTML injection in <code>author_name</code> and <code>content</code></td>
+            </tr>
+            <tr>
+              <td>3 — Moderation</td>
+              <td><code>is_approved=False</code> default</td>
+              <td>Spam, offensive content — reviewed manually in Django Admin</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-info">
+          <p class="callout-label" style="color:var(--blue)">// Future Enhancement</p>
+          <p>Rate limiting (e.g. <code>django-ratelimit</code>) can be added to the POST endpoint as a decorator. Recommended limit: 3 comments per IP per 10 minutes. This is outside MVP scope but trivial to add later.</p>
+        </div>
+      </section>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         PHASE 3
+    ═══════════════════════════════════════════ -->
+    <section id="phase-3">
+      <div class="phase-header phase-3">
+        <span class="phase-num phase-num-3">PHASE 03</span>
+        <div>
+          <p class="font-mono font-bold text-sm mb-1" style="color:var(--indigo)">Scale & UX — Pagination</p>
+          <p class="text-xs" style="color:var(--muted)">Add pagination to projects and posts endpoints. Entry: Phase 2 complete. Exit: scrolling the index page loads more items without full page refresh.</p>
+        </div>
+      </div>
+
+      <!-- 3.1 -->
+      <section id="p3-strategy">
+        <h2>3.1 Pagination Strategy</h2>
+        <p>We will use <strong>cursor-based pagination</strong> via Django Ninja's built-in <code>paginate</code> decorator. This is preferred over offset pagination for the following reasons:</p>
+
+        <table class="doc-table">
+          <thead>
+            <tr><th>Property</th><th>Cursor (chosen)</th><th>Offset (rejected)</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Stability</td>
+              <td>✓ Stable — uses <code>created_at</code> as cursor anchor</td>
+              <td>✗ Unstable — new rows shift pages</td>
+            </tr>
+            <tr>
+              <td>Performance at scale</td>
+              <td>✓ O(1) — index seek</td>
+              <td>✗ O(n) — full table scan with OFFSET</td>
+            </tr>
+            <tr>
+              <td>UX pattern</td>
+              <td>✓ "Load more" / infinite scroll</td>
+              <td>✓ Numbered pages (not needed here)</td>
+            </tr>
+            <tr>
+              <td>Complexity</td>
+              <td>⚠ Slightly more backend code</td>
+              <td>✓ Simpler</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>Page size will be <strong>9 items</strong> for projects (fills 3-column grid exactly) and <strong>10 items</strong> for blog posts.</p>
+      </section>
+
+      <!-- 3.2 -->
+      <section id="p3-backend">
+        <h2>3.2 Backend Implementation</h2>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · api_gateway/api/portfolio.py (updated)</span>
+          </div>
+          <pre><span class="tok-kw">from</span> ninja <span class="tok-kw">import</span> Router, Schema
+<span class="tok-kw">from</span> ninja.pagination <span class="tok-kw">import</span> paginate, PageNumberPagination
+
+router = <span class="tok-cls">Router</span>(tags=[<span class="tok-str">"Portfolio"</span>])
+
+<span class="tok-kw">class</span> <span class="tok-cls">ProjectOut</span>(<span class="tok-cls">Schema</span>):
+    id:          UUID
+    title:       str
+    slug:        str
+    description: str
+    created_at:  datetime
+
+@router.<span class="tok-fn">get</span>(<span class="tok-str">"/projects"</span>, response=List[<span class="tok-cls">ProjectOut</span>])
+@<span class="tok-fn">paginate</span>(<span class="tok-cls">PageNumberPagination</span>, page_size=<span class="tok-num">9</span>)
+<span class="tok-kw">def</span> <span class="tok-fn">list_projects</span>(request, **kwargs):
+    <span class="tok-kw">return</span> <span class="tok-cls">Project</span>.objects.all().order_by(<span class="tok-str">'-created_at'</span>)</pre>
+        </div>
+
+        <p>The paginated response shape from Ninja becomes:</p>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">json · GET /api/v1/portfolio/projects?page=1</span>
+          </div>
+          <pre>{
+  <span class="tok-str">"items"</span>: [ ... ],      <span class="tok-cm">// array of ProjectOut</span>
+  <span class="tok-str">"count"</span>: <span class="tok-num">24</span>,           <span class="tok-cm">// total items in DB</span>
+  <span class="tok-str">"page"</span>:  <span class="tok-num">1</span>            <span class="tok-cm">// current page</span>
+}</pre>
+        </div>
+
+        <div class="callout callout-warn">
+          <p class="callout-label" style="color:var(--amber)">⚠ Breaking Change</p>
+          <p>Adding <code>@paginate</code> changes the response shape from <code>Array</code> to <code>Object</code>. The frontend JS must be updated simultaneously. The existing standalone HTML files use <code>const projects = await res.json()</code> — this will need to become <code>const { items: projects, count } = await res.json()</code>. Plan both changes together to avoid a broken intermediate state.</p>
+        </div>
+      </section>
+
+      <!-- 3.3 -->
+      <section id="p3-frontend">
+        <h2>3.3 Frontend JS Pattern</h2>
+        <p>The "Load More" pattern is the correct UX choice here — it is non-disruptive, works without JavaScript history API complexity, and is straightforward to implement.</p>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">javascript · pagination logic (vanilla JS)</span>
+          </div>
+          <pre><span class="tok-kw">const</span> state = {
+  projectsPage: <span class="tok-num">1</span>,
+  projectsTotal: <span class="tok-num">0</span>,
+  projectsLoading: <span class="tok-kw">false</span>,
+};
+
+<span class="tok-kw">async function</span> <span class="tok-fn">fetchProjects</span>(page = <span class="tok-num">1</span>) {
+  <span class="tok-kw">if</span> (state.projectsLoading) <span class="tok-kw">return</span>;
+  state.projectsLoading = <span class="tok-kw">true</span>;
+
+  <span class="tok-kw">const</span> res  = <span class="tok-kw">await</span> fetch(`${AO.API}/portfolio/projects?page=${page}`);
+  <span class="tok-kw">const</span> data = <span class="tok-kw">await</span> res.json();
+
+  <span class="tok-cm">// data = { items: [...], count: N, page: N }</span>
+  <span class="tok-kw">const</span> { items, count } = data;
+
+  state.projectsTotal   = count;
+  state.projectsPage    = page;
+  state.projectsLoading = <span class="tok-kw">false</span>;
+
+  <span class="tok-fn">renderProjectCards</span>(items, page > <span class="tok-num">1</span>); <span class="tok-cm">// append if page > 1</span>
+
+  <span class="tok-cm">// Show/hide "Load More" button</span>
+  <span class="tok-kw">const</span> shown = page * <span class="tok-num">9</span>;
+  <span class="tok-kw">const</span> btn   = document.getElementById(<span class="tok-str">'load-more-projects'</span>);
+  btn.classList.toggle(<span class="tok-str">'hidden'</span>, shown >= count);
+}
+
+<span class="tok-cm">// "Load More" button onclick:</span>
+document.getElementById(<span class="tok-str">'load-more-projects'</span>)
+  .addEventListener(<span class="tok-str">'click'</span>, () => {
+    <span class="tok-fn">fetchProjects</span>(state.projectsPage + <span class="tok-num">1</span>);
+  });</pre>
+        </div>
+      </section>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         PHASE 4
+    ═══════════════════════════════════════════ -->
+    <section id="phase-4">
+      <div class="phase-header phase-4">
+        <span class="phase-num phase-num-4">PHASE 04</span>
+        <div>
+          <p class="font-mono font-bold text-sm mb-1" style="color:var(--amber)">The Deployment Pipeline</p>
+          <p class="text-xs" style="color:var(--muted)">Take the application from local to production. Entry: Phases 1–3 verified on a staging server. Exit: <code>https://aonware.ai</code> is live, HTTPS, zero downtime on restart.</p>
+        </div>
+      </div>
+
+      <!-- 4.1 -->
+      <section id="p4-stack">
+        <h2>4.1 Full Stack Overview</h2>
+        <p>Each layer has a specific, non-overlapping responsibility. Understanding this separation is essential before configuration begins.</p>
+
+        <div class="arch-diagram">
+<span class="amber">NGINX</span>  (Layer 1 — Public Edge)
+  Role:  SSL/TLS termination · domain routing · gzip · static file serving
+  Sees:  Raw TCP connections from the internet
+  Speaks: HTTP/HTTPS → upstream socket
+
+      ↓  HTTP (Unix socket or TCP localhost:8000)
+
+<span class="highlight">GUNICORN</span>  (Layer 2 — WSGI App Server)
+  Role:  Manages multiple Django worker processes
+  Sees:  HTTP requests forwarded by Nginx
+  Speaks: WSGI protocol → Django app
+
+      ↓  Python function calls (WSGI)
+
+<span class="purple">DJANGO</span>  (Layer 3 — Application)
+  Role:  URL routing · views · ORM · API (Ninja) · template rendering
+  Sees:  Parsed HTTP request objects
+  Speaks: Python objects → Gunicorn
+
+      ↓  SQL
+
+<span class="green">POSTGRESQL</span>  (Layer 4 — Data)
+  Role:  Persistent storage for all models
+        </div>
+
+        <h3>Where Whitenoise fits</h3>
+        <p>Whitenoise inserts itself between Nginx and Django as a <strong>WSGI middleware</strong>. When a request comes in for a static file (e.g. <code>/static/core/css/base.abc123.css</code>), Whitenoise intercepts it and responds directly — Django's view layer never runs. This means static files are served correctly even if Nginx is not configured to serve them (valuable for platforms like Railway, Heroku, Render).</p>
+
+        <div class="callout callout-info">
+          <p class="callout-label" style="color:var(--blue)">// Performance Note</p>
+          <p>In high-traffic production, Nginx <em>should</em> serve static files directly (bypassing Gunicorn entirely) for maximum throughput. Whitenoise handles the fallback for platforms where Nginx isn't configurable. Both approaches can coexist — Nginx serves <code>/static/</code> when it can; Whitenoise handles edge cases.</p>
+        </div>
+      </section>
+
+      <!-- 4.2 -->
+      <section id="p4-whitenoise">
+        <h2>4.2 Whitenoise Configuration</h2>
+        <p>Whitenoise has already been addressed in Phase 1. For production, one additional setting enables <strong>Brotli + gzip compression</strong> and <strong>aggressive cache headers</strong> (the <code>CompressedManifestStaticFilesStorage</code> backend, already specified in Phase 1, handles both).</p>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · aonware_ai/settings/production.py</span>
+          </div>
+          <pre><span class="tok-kw">from</span> .base <span class="tok-kw">import</span> *
+
+<span class="tok-dec">DEBUG</span> = <span class="tok-kw">False</span>
+<span class="tok-dec">ALLOWED_HOSTS</span> = env.list(<span class="tok-str">'ALLOWED_HOSTS'</span>)  <span class="tok-cm"># ['aonware.ai', 'www.aonware.ai']</span>
+<span class="tok-dec">SECRET_KEY</span>    = env(<span class="tok-str">'SECRET_KEY'</span>)
+
+<span class="tok-cm"># Whitenoise: cache static files for 1 year (fingerprinted filenames)</span>
+<span class="tok-dec">WHITENOISE_MAX_AGE</span> = <span class="tok-num">31536000</span>  <span class="tok-cm"># seconds — safe with hashed filenames</span>
+
+<span class="tok-cm"># Security headers</span>
+<span class="tok-dec">SECURE_SSL_REDIRECT</span>        = <span class="tok-kw">True</span>
+<span class="tok-dec">SESSION_COOKIE_SECURE</span>      = <span class="tok-kw">True</span>
+<span class="tok-dec">CSRF_COOKIE_SECURE</span>         = <span class="tok-kw">True</span>
+<span class="tok-dec">SECURE_HSTS_SECONDS</span>        = <span class="tok-num">31536000</span>
+<span class="tok-dec">SECURE_HSTS_INCLUDE_SUBDOMAINS</span> = <span class="tok-kw">True</span>
+<span class="tok-dec">SECURE_HSTS_PRELOAD</span>        = <span class="tok-kw">True</span></pre>
+        </div>
+      </section>
+
+      <!-- 4.3 -->
+      <section id="p4-gunicorn">
+        <h2>4.3 Gunicorn Configuration</h2>
+        <p>Gunicorn should be configured via a <code>gunicorn.conf.py</code> file (not CLI flags) for reproducibility. Worker count follows the standard formula: <code>2 × CPU cores + 1</code>.</p>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">python · gunicorn.conf.py (project root)</span>
+          </div>
+          <pre><span class="tok-cm"># Gunicorn configuration — aonware.ai</span>
+bind            = <span class="tok-str">'unix:/run/aonware/gunicorn.sock'</span>  <span class="tok-cm"># Unix socket (faster than TCP)</span>
+workers         = <span class="tok-num">3</span>             <span class="tok-cm"># 2 × cores + 1 (adjust for your VPS)</span>
+worker_class    = <span class="tok-str">'sync'</span>        <span class="tok-cm"># sync is correct for standard Django/WSGI</span>
+timeout         = <span class="tok-num">30</span>            <span class="tok-cm"># seconds before killing a hung worker</span>
+keepalive       = <span class="tok-num">5</span>
+max_requests    = <span class="tok-num">1000</span>          <span class="tok-cm"># restart workers after N requests (memory leak guard)</span>
+max_requests_jitter = <span class="tok-num">100</span>      <span class="tok-cm"># randomize restart to avoid thundering herd</span>
+accesslog       = <span class="tok-str">'/var/log/aonware/gunicorn_access.log'</span>
+errorlog        = <span class="tok-str">'/var/log/aonware/gunicorn_error.log'</span>
+loglevel        = <span class="tok-str">'info'</span></pre>
+        </div>
+
+        <h3>Systemd service unit</h3>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">ini · /etc/systemd/system/aonware.service</span>
+          </div>
+          <pre>[Unit]
+Description=Aonware.ai Gunicorn WSGI Server
+After=network.target
+
+[Service]
+User=aonware
+Group=www-data
+WorkingDirectory=/srv/aonware
+Environment="DJANGO_SETTINGS_MODULE=aonware_ai.settings.production"
+ExecStart=/srv/aonware/.venv/bin/gunicorn aonware_ai.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+Restart=on-failure
+RuntimeDirectory=aonware
+
+[Install]
+WantedBy=multi-user.target</pre>
+        </div>
+
+        <p>Deployment commands after a code push:</p>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">bash · deployment sequence</span>
+          </div>
+          <pre><span class="tok-cm"># 1. Pull new code</span>
+git pull origin main
+
+<span class="tok-cm"># 2. Install dependencies</span>
+poetry install --no-dev
+
+<span class="tok-cm"># 3. Apply migrations</span>
+python manage.py migrate --settings=aonware_ai.settings.production
+
+<span class="tok-cm"># 4. Collect static files</span>
+python manage.py collectstatic --noinput --settings=aonware_ai.settings.production
+
+<span class="tok-cm"># 5. Reload Gunicorn (zero-downtime — sends SIGHUP)</span>
+sudo systemctl reload aonware</pre>
+        </div>
+
+        <div class="callout callout-success">
+          <p class="callout-label" style="color:var(--emerald)">✓ Zero Downtime</p>
+          <p><code>systemctl reload</code> sends <code>SIGHUP</code> to Gunicorn, which performs a graceful restart — in-flight requests complete before old workers are replaced by new ones. <strong>Never use <code>systemctl restart</code></strong> in production, which kills all workers immediately.</p>
+        </div>
+      </section>
+
+      <!-- 4.4 -->
+      <section id="p4-nginx">
+        <h2>4.4 Nginx Configuration</h2>
+        <p>Nginx sits in front of Gunicorn and handles SSL termination, HTTP→HTTPS redirect, gzip, and direct static file serving.</p>
+
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">nginx · /etc/nginx/sites-available/aonware.ai</span>
+          </div>
+          <pre><span class="tok-cm"># HTTP → HTTPS redirect</span>
+server {
+    listen 80;
+    server_name aonware.ai www.aonware.ai;
+    return 301 https://$host$request_uri;
+}
+
+<span class="tok-cm"># HTTPS main server block</span>
+server {
+    listen 443 ssl http2;
+    server_name aonware.ai www.aonware.ai;
+
+    <span class="tok-cm"># SSL — obtained via Certbot (Let's Encrypt)</span>
+    ssl_certificate     /etc/letsencrypt/live/aonware.ai/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/aonware.ai/privkey.pem;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    <span class="tok-cm"># Gzip compression</span>
+    gzip on;
+    gzip_types text/css application/javascript application/json;
+
+    <span class="tok-cm"># Static files — served directly by Nginx (fastest path)</span>
+    location /static/ {
+        alias /srv/aonware/staticfiles/;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    <span class="tok-cm"># All other requests → Gunicorn via Unix socket</span>
+    location / {
+        proxy_pass         http://unix:/run/aonware/gunicorn.sock;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_read_timeout 30s;
+    }
+}</pre>
+        </div>
+
+        <h3>SSL certificate provisioning</h3>
+        <div class="code-block">
+          <div class="code-block-hdr">
+            <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <span class="lang">bash · Let's Encrypt via Certbot</span>
+          </div>
+          <pre><span class="tok-cm"># Install Certbot (Ubuntu)</span>
+sudo apt install certbot python3-certbot-nginx
+
+<span class="tok-cm"># Obtain and auto-configure certificate</span>
+sudo certbot --nginx -d aonware.ai -d www.aonware.ai
+
+<span class="tok-cm"># Auto-renewal is set up by Certbot automatically</span>
+<span class="tok-cm"># Verify: sudo certbot renew --dry-run</span></pre>
+        </div>
+      </section>
+
+      <!-- 4.5 -->
+      <section id="p4-checklist">
+        <h2>4.5 Go-Live Checklist</h2>
+        <p>Every item must be checked before traffic is directed to the server.</p>
+
+        <table class="doc-table">
+          <thead>
+            <tr><th>#</th><th>Check</th><th>Command / Verification</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><code>DEBUG=False</code> in production settings</td><td><code>python manage.py check --deploy</code></td></tr>
+            <tr><td>2</td><td>All migrations applied</td><td><code>python manage.py showmigrations</code></td></tr>
+            <tr><td>3</td><td>Static files collected</td><td><code>ls staticfiles/</code> — must have content</td></tr>
+            <tr><td>4</td><td>Gunicorn service running</td><td><code>systemctl status aonware</code></td></tr>
+            <tr><td>5</td><td>Nginx config valid</td><td><code>nginx -t</code></td></tr>
+            <tr><td>6</td><td>SSL certificate valid</td><td><code>curl -I https://aonware.ai</code> → 200</td></tr>
+            <tr><td>7</td><td>HTTP redirects to HTTPS</td><td><code>curl -I http://aonware.ai</code> → 301</td></tr>
+            <tr><td>8</td><td>API health check</td><td><code>curl https://aonware.ai/api/v1/health</code> → <code>{"status":"ok"}</code></td></tr>
+            <tr><td>9</td><td>CORS origins correct</td><td>Check <code>CORS_ALLOWED_ORIGINS</code> in production settings</td></tr>
+            <tr><td>10</td><td>Admin accessible</td><td>Visit <code>/admin/</code> — must load with styles</td></tr>
+            <tr><td>11</td><td>Superuser exists</td><td><code>python manage.py createsuperuser</code></td></tr>
+            <tr><td>12</td><td>Log files writable</td><td><code>ls -la /var/log/aonware/</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         APPENDIX
+    ═══════════════════════════════════════════ -->
+
+    <section id="env">
+      <h2>Appendix A — .env Reference</h2>
+      <p>All environment variables required for production. Store in <code>.env</code> (dev) and server environment / secrets manager (prod). <strong>Never commit to Git.</strong></p>
+
+      <table class="doc-table">
+        <thead>
+          <tr><th>Variable</th><th>Example</th><th>Required in</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>SECRET_KEY</code></td><td><code>50-char random string</code></td><td>All</td></tr>
+          <tr><td><code>DEBUG</code></td><td><code>False</code></td><td>Prod</td></tr>
+          <tr><td><code>ALLOWED_HOSTS</code></td><td><code>aonware.ai,www.aonware.ai</code></td><td>Prod</td></tr>
+          <tr><td><code>DATABASE_URL</code></td><td><code>postgres://user:pass@localhost/aonware</code></td><td>All</td></tr>
+          <tr><td><code>REDIS_URL</code></td><td><code>redis://localhost:6379/0</code></td><td>All</td></tr>
+          <tr><td><code>CORS_ALLOWED_ORIGINS</code></td><td><code>https://aonware.ai</code></td><td>Prod</td></tr>
+          <tr><td><code>DJANGO_SETTINGS_MODULE</code></td><td><code>aonware_ai.settings.production</code></td><td>Prod</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="risks" style="margin-top:2.5rem">
+      <h2>Appendix B — Risk Register</h2>
+
+      <table class="doc-table">
+        <thead>
+          <tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Comment spam on public endpoint</td>
+            <td>High</td>
+            <td>Medium</td>
+            <td><code>is_approved=False</code> default; add <code>django-ratelimit</code> in Phase 2+</td>
+          </tr>
+          <tr>
+            <td>Static files 404 after deploy</td>
+            <td>Medium</td>
+            <td>High (visual breakage)</td>
+            <td>Always run <code>collectstatic</code> before <code>systemctl reload</code></td>
+          </tr>
+          <tr>
+            <td>Pagination breaking existing JS</td>
+            <td>High (guaranteed)</td>
+            <td>Medium</td>
+            <td>Update API and JS in the same deploy; use feature flag if needed</td>
+          </tr>
+          <tr>
+            <td>CORS errors from local frontend</td>
+            <td>Low (after Django integration)</td>
+            <td>Low</td>
+            <td>Remove <code>corsheaders</code> from middleware once frontend is served by Django</td>
+          </tr>
+          <tr>
+            <td>SSL certificate expiry</td>
+            <td>Low (Certbot auto-renews)</td>
+            <td>Critical</td>
+            <td>Monitor with <code>certbot renew --dry-run</code> in cron; set up alert</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ── Footer note ── -->
+    <div class="mt-16 pt-8" style="border-top:1px solid var(--border)">
+      <p class="font-mono text-xs" style="color:var(--dim)">
+        <span style="color:var(--blue)">$</span> echo "Blueprint v1.0.0 — Aonware.ai — Awaiting approval to execute Phase 1."
+      </p>
+    </div>
+
+  </article>
+</div>
+
+<script>
+  /* Progress bar */
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    document.getElementById('progress-bar').style.width =
+      (doc.scrollTop / (doc.scrollHeight - doc.clientHeight) * 100) + '%';
+  }, { passive: true });
+
+  /* Sidebar active link on scroll */
+  const sections = document.querySelectorAll('section[id]');
+  const links    = document.querySelectorAll('.sidebar-link');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+      }
+    });
+  }, { rootMargin: '-20% 0px -75% 0px' });
+  sections.forEach(s => io.observe(s));
+</script>
+
+</body>
+</html>

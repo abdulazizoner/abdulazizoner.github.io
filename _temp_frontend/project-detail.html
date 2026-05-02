@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project — Aonware.ai</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        colors: { bg:'#0d1117', surface:'#161b22', border:'#21262d', subtle:'#30363d',
+                  indigo:'#7c6bc9', blue:'#5CACF0', emerald:'#3ddba8', muted:'#8b949e', dim:'#484f58' },
+        fontFamily: { sans:['Inter','sans-serif'], mono:['JetBrains Mono','monospace'] },
+      }}
+    }
+  </script>
+  <style>
+    .detail-skeleton { display: grid; gap: 1.5rem; }
+  </style>
+</head>
+<body class="flex flex-col">
+
+<div id="progress-bar"></div>
+<nav id="ao-nav" class="nav-glass sticky top-0 z-50"></nav>
+
+<!-- ══════════════════ CONTENT ══════════════════ -->
+<main class="flex-grow">
+  <div class="max-w-5xl mx-auto px-6 py-14">
+
+    <!-- Loading state -->
+    <div id="project-loading">
+      <div class="mb-8">
+        <div class="skeleton h-3 w-32 mb-5"></div>
+        <div class="skeleton h-10 w-3/4 mb-4"></div>
+        <div class="skeleton h-4 w-1/2 mb-6"></div>
+        <div class="flex gap-2 mb-6">
+          <div class="skeleton h-6 w-16"></div>
+          <div class="skeleton h-6 w-20"></div>
+          <div class="skeleton h-6 w-14"></div>
+        </div>
+        <div class="skeleton h-px w-full"></div>
+      </div>
+      <div class="grid md:grid-cols-[1fr_280px] gap-10">
+        <div class="space-y-3">
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-5/6"></div>
+          <div class="skeleton h-4 w-4/5"></div>
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-3/4"></div>
+        </div>
+        <div class="space-y-4">
+          <div class="skeleton h-32 w-full rounded-xl"></div>
+          <div class="skeleton h-24 w-full rounded-xl"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div id="project-error" class="hidden">
+      <div class="state-error max-w-lg mx-auto mt-20">
+        <p class="font-mono text-sm mb-2" style="color:#f87171">
+          <span style="color:#ef4444">[ERR]</span> <span id="err-msg">Project not found.</span>
+        </p>
+        <p class="font-mono text-xs mt-3" style="color:var(--dim)">
+          <span id="err-hint">Ensure the slug param is correct and the API is running.</span>
+        </p>
+        <a href="aonware-index.html" class="inline-block mt-5 font-mono text-xs px-4 py-2 rounded"
+           style="color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 35%,transparent);background:color-mix(in srgb,var(--blue) 8%,transparent)">
+          ← <span data-tr="Ana sayfaya dön" data-en="Back to home">Ana sayfaya dön</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Live content -->
+    <div id="project-content" class="hidden">
+
+      <!-- Header -->
+      <header class="mb-10 fade-up">
+        <!-- Breadcrumb -->
+        <div class="flex items-center gap-2 font-mono text-xs mb-5" style="color:var(--dim)">
+          <a href="aonware-index.html" class="hover:text-blue transition-colors" style="color:var(--dim)"
+             data-tr="~/projeler" data-en="~/projects">~/projeler</a>
+          <span>/</span>
+          <span id="bc-slug" style="color:var(--emerald)"></span>
+        </div>
+
+        <h1 id="proj-title" class="font-mono font-bold text-3xl sm:text-4xl mb-4 leading-tight" style="color:var(--text)"></h1>
+
+        <!-- Meta -->
+        <div class="flex flex-wrap items-center gap-3 mb-6 font-mono text-xs" style="color:var(--muted)">
+          <span>Abdülaziz Öner</span>
+          <span style="color:var(--border)">·</span>
+          <span id="proj-date"></span>
+          <span style="color:var(--border)">·</span>
+          <span id="proj-id" style="color:var(--dim)"></span>
+        </div>
+
+        <!-- Tech stack badges -->
+        <div id="proj-tech" class="flex flex-wrap gap-2 mb-6"></div>
+
+        <!-- Divider -->
+        <div class="h-px" style="background:linear-gradient(90deg,var(--blue),var(--indigo),transparent)"></div>
+      </header>
+
+      <!-- Body -->
+      <div class="grid md:grid-cols-[1fr_260px] gap-10 items-start">
+
+        <!-- Description -->
+        <div class="fade-up" style="animation-delay:0.1s">
+          <p class="font-mono text-xs mb-3" style="color:var(--dim)">// <span data-tr="proje_açıklaması" data-en="project_description">proje_açıklaması</span></p>
+          <div id="proj-desc" class="prose-body"></div>
+
+          <!-- Project image (if available) -->
+          <div id="proj-image-wrap" class="hidden mt-8 rounded-xl overflow-hidden" style="border:1px solid var(--border)">
+            <div class="flex items-center gap-1.5 px-3 h-7" style="background:color-mix(in srgb,var(--border) 60%,transparent);border-bottom:1px solid var(--border)">
+              <span class="w-2 h-2 rounded-full" style="background:#ff5f57"></span>
+              <span class="w-2 h-2 rounded-full" style="background:#febc2e"></span>
+              <span class="w-2 h-2 rounded-full" style="background:#28c840"></span>
+              <span class="font-mono ml-auto" style="font-size:9px;color:var(--muted)" id="proj-image-label">project_screenshot.png</span>
+            </div>
+            <img id="proj-image" src="" alt="Project screenshot" class="w-full object-cover" style="max-height:360px" />
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="space-y-5 fade-up" style="animation-delay:0.15s">
+
+          <!-- GitHub CTA -->
+          <div id="github-card" class="hidden rounded-xl p-5" style="background:var(--surf);border:1px solid var(--border)">
+            <p class="font-mono text-xs mb-4" style="color:var(--dim)">// <span data-tr="kaynak_kod" data-en="source_code">kaynak_kod</span></p>
+            <a id="github-link" href="#" target="_blank" rel="noopener noreferrer"
+               class="flex items-center gap-2.5 w-full font-mono text-xs px-4 py-3 rounded-lg transition-all"
+               style="color:var(--text);background:color-mix(in srgb,var(--border) 50%,transparent);border:1px solid var(--border)"
+               onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'"
+               onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
+              <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+              <span data-tr="GitHub'da Görüntüle" data-en="View on GitHub">GitHub'da Görüntüle</span>
+              <svg class="w-3 h-3 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+          </div>
+
+          <!-- Meta card -->
+          <div class="rounded-xl p-5" style="background:var(--surf);border:1px solid var(--border)">
+            <p class="font-mono text-xs mb-4" style="color:var(--dim)">// <span data-tr="proje_meta" data-en="project_meta">proje_meta</span></p>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs" style="color:var(--dim)" data-tr="durum" data-en="status">durum</span>
+                <span class="font-mono text-xs" style="color:var(--emerald)">● <span data-tr="aktif" data-en="active">aktif</span></span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs" style="color:var(--dim)" data-tr="yazar" data-en="author">yazar</span>
+                <span class="font-mono text-xs" style="color:var(--text)">Abdülaziz Öner</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs" style="color:var(--dim)">slug</span>
+                <span class="font-mono text-xs" id="meta-slug" style="color:var(--blue)"></span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs" style="color:var(--dim)" data-tr="tarih" data-en="date">tarih</span>
+                <span class="font-mono text-xs" id="meta-date" style="color:var(--muted)"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Author card -->
+          <div class="rounded-xl p-5" style="background:var(--surf);border:1px solid var(--border)">
+            <p class="font-mono text-xs mb-4" style="color:var(--dim)">// <span data-tr="geliştirici" data-en="developer">geliştirici</span></p>
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0 font-mono"
+                   style="background:color-mix(in srgb,var(--indigo) 20%,transparent);color:var(--indigo);border:1px solid color-mix(in srgb,var(--indigo) 40%,transparent)">AÖ</div>
+              <div>
+                <p class="font-mono text-xs font-semibold" style="color:var(--text)">Abdülaziz Öner</p>
+                <p class="font-mono" style="font-size:10px;color:var(--muted)">AI &amp; Data Engineer</p>
+              </div>
+            </div>
+            <div class="flex gap-2 mt-3">
+              <a href="https://www.linkedin.com/in/abdülaziz-öner/" target="_blank" rel="noopener noreferrer" class="s-icon" style="width:30px;height:30px" title="LinkedIn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              </a>
+              <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer" class="s-icon" style="width:30px;height:30px" title="GitHub">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+              </a>
+              <a href="https://huggingface.co/abdulazizoner" target="_blank" rel="noopener noreferrer" class="s-icon" style="width:30px;height:30px" title="Hugging Face">
+                <svg width="13" height="13" viewBox="0 0 95 88" fill="currentColor"><path d="M47.2 0C21.2 0 0 19.7 0 44c0 24.2 21.2 44 47.2 44s47.2-19.8 47.2-44C94.4 19.7 73.2 0 47.2 0zm-14 58.5c-2.6 0-4.7-2.5-4.7-5.6s2.1-5.6 4.7-5.6 4.7 2.5 4.7 5.6-2.1 5.6-4.7 5.6zm28 0c-2.6 0-4.7-2.5-4.7-5.6s2.1-5.6 4.7-5.6 4.7 2.5 4.7 5.6-2.1 5.6-4.7 5.6zm11-18.4c-2.3-2.8-5.3-4.7-8.7-5.7l2.5-5.7c.3-.7 0-1.5-.7-1.9-.7-.3-1.5 0-1.9.7l-2.7 6.1c-2.2-.5-4.5-.8-6.8-.8-2.4 0-4.7.3-6.9.8l-2.7-6.1c-.4-.7-1.2-1-1.9-.7-.7.4-1 1.2-.7 1.9l2.5 5.7c-3.4 1-6.4 2.9-8.7 5.7-.5.6-.4 1.5.2 2 .6.5 1.5.4 2-.2 3.8-4.6 9.3-7.1 16.2-7.1s12.4 2.5 16.2 7.1c.5.6 1.4.7 2 .2.6-.5.7-1.4.2-2z"/></svg>
+              </a>
+              <a href="https://www.kaggle.com/abdlazizoner" target="_blank" rel="noopener noreferrer" class="s-icon" style="width:30px;height:30px" title="Kaggle">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.505c-.236 0-.354-.117-.354-.352V.353c0-.233.118-.353.354-.353h2.431c.234 0 .351.12.351.353v14.343l6.203-6.272c.165-.165.33-.246.495-.246h3.239c.144 0 .236.06.285.18.046.149.034.255-.036.315l-6.555 6.344 6.836 8.507c.095.104.117.208.07.336"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer id="ao-footer" style="border-top:1px solid var(--border);background:color-mix(in srgb,var(--surf) 50%,transparent)"></footer>
+
+<script src="base.js"></script>
+<script>
+'use strict';
+
+const API  = AO.API;
+const slug = AO.getSlug();
+const lang = () => getLang();
+
+/* ── Fetch project ── */
+async function loadProject() {
+  const loading = document.getElementById('project-loading');
+  const error   = document.getElementById('project-error');
+  const content = document.getElementById('project-content');
+  const errMsg  = document.getElementById('err-msg');
+  const errHint = document.getElementById('err-hint');
+
+  if (!slug) {
+    loading.classList.add('hidden');
+    error.classList.remove('hidden');
+    errMsg.textContent  = lang() === 'tr' ? 'Slug parametresi eksik.' : 'Missing slug parameter.';
+    errHint.textContent = lang() === 'tr' ? 'URL\'de ?slug=... olması gerekiyor.' : 'URL must include ?slug=...';
+    return;
+  }
+
+  try {
+    /* Try by slug via list endpoint first (API doesn't expose /projects/{slug} by default) */
+    const res = await fetch(`${API}/portfolio/projects`, { headers:{ Accept:'application/json' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    const all = await res.json();
+    const p   = all.find(x => x.slug === slug);
+
+    if (!p) throw new Error(lang() === 'tr' ? `"${slug}" projesi bulunamadı.` : `Project "${slug}" not found.`);
+
+    loading.classList.add('hidden');
+    content.classList.remove('hidden');
+    document.title = `${p.title} — Aonware.ai`;
+
+    /* Populate */
+    document.getElementById('bc-slug').textContent    = p.slug;
+    document.getElementById('proj-title').textContent = p.title;
+    document.getElementById('proj-date').textContent  = AO.fmtDate(p.created_at);
+    document.getElementById('proj-id').textContent    = `id: ${String(p.id||'').slice(0,8)}…`;
+    document.getElementById('meta-slug').textContent  = p.slug;
+    document.getElementById('meta-date').textContent  = AO.fmtDate(p.created_at);
+
+    /* Description — convert newlines to <p> */
+    const descEl = document.getElementById('proj-desc');
+    const paras  = (p.description || '').split(/\n\n+/).filter(Boolean);
+    descEl.innerHTML = paras.length
+      ? paras.map(t => `<p>${AO.esc(t)}</p>`).join('')
+      : `<p>${AO.esc(p.description)}</p>`;
+
+    /* Tech stack badges */
+    const techEl = document.getElementById('proj-tech');
+    if (Array.isArray(p.tech_stack) && p.tech_stack.length) {
+      techEl.innerHTML = p.tech_stack.map(t =>
+        `<span class="tech-badge">${AO.esc(t.name)}</span>`
+      ).join('');
+    } else {
+      techEl.innerHTML = '<span class="font-mono text-xs" style="color:var(--dim)">— no tech_stack in API response —</span>';
+    }
+
+    /* GitHub link */
+    if (p.github_url) {
+      const ghCard = document.getElementById('github-card');
+      const ghLink = document.getElementById('github-link');
+      ghCard.classList.remove('hidden');
+      ghLink.href = p.github_url;
+    }
+
+    /* Project image */
+    if (p.project_image) {
+      const wrap  = document.getElementById('proj-image-wrap');
+      const img   = document.getElementById('proj-image');
+      const label = document.getElementById('proj-image-label');
+      wrap.classList.remove('hidden');
+      img.src        = p.project_image;
+      label.textContent = p.slug + '_screenshot.png';
+    }
+
+  } catch (err) {
+    console.error('[Aonware] Project detail:', err);
+    loading.classList.add('hidden');
+    error.classList.remove('hidden');
+    errMsg.textContent  = err.message;
+    errHint.textContent = lang() === 'tr'
+      ? 'API\'nin http://127.0.0.1:8000 adresinde çalıştığından emin olun.'
+      : 'Ensure the API is running at http://127.0.0.1:8000';
+  }
+}
+
+aoInit({ showBack: true, backHref: 'aonware-index.html#portfolio' });
+loadProject();
+</script>
+</body>
+</html>
