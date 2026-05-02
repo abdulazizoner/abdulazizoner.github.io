@@ -1,32 +1,13 @@
-<!DOCTYPE html>
-<html lang="tr" class="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Post — Aonware.ai</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="base.css" />
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: {
-        colors: { bg:'#0d1117', surface:'#161b22', border:'#21262d', subtle:'#30363d',
-                  indigo:'#7c6bc9', blue:'#5CACF0', emerald:'#3ddba8', muted:'#8b949e', dim:'#484f58' },
-        fontFamily: { sans:['Inter','sans-serif'], mono:['JetBrains Mono','monospace'] },
-      }}
-    }
-  </script>
-  <style>
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Post — Aonware.ai{% endblock %}
+
+{% block content %}
+<style>
     /* TOC active highlight */
     .toc-link.active { color: var(--blue); border-color: var(--blue); }
-  </style>
-</head>
-<body class="flex flex-col">
-
-<div id="progress-bar"></div>
-<nav id="ao-nav" class="nav-glass sticky top-0 z-50"></nav>
-
+</style>
 <main class="flex-grow">
   <div class="max-w-5xl mx-auto px-5 py-12">
 
@@ -261,17 +242,14 @@
 
   </div>
 </main>
+{% endblock content %}
 
-<footer id="ao-footer" style="border-top:1px solid var(--border);background:color-mix(in srgb,var(--surf) 50%,transparent)"></footer>
-
-<script src="base.js"></script>
+{% block scripts %}
+<!-- Markdown Parser & Highlight.js -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 <script>
-'use strict';
-
-const API  = AO.API;
-const slug = AO.getSlug();
-
-/* ── Markdown-lite renderer ──────────────────────────────────────
+const slug = window.location.pathname.split("/").filter(Boolean).pop();
    Converts content_markdown to safe HTML. Handles:
    # headings, **bold**, `code`, > blockquote, - lists, blank lines → <p>
 ─────────────────────────────────────────────────────────────────── */
@@ -599,7 +577,7 @@ async function loadPost() {
   const error   = document.getElementById('post-error');
   const content = document.getElementById('post-content');
 
-  if (!slug) {
+    if (!slug) {
     loading.classList.add('hidden');
     error.classList.remove('hidden');
     document.getElementById('err-msg').textContent = getLang() === 'tr'
@@ -612,7 +590,8 @@ async function loadPost() {
     const res = await fetch(`${API}/blog/posts`, { headers:{ Accept:'application/json' } });
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
 
-    const all  = await res.json();
+    let all = await res.json();
+    if (all.items) all = all.items;
     const post = all.find(p => p.slug === slug);
     if (!post) throw new Error(getLang() === 'tr' ? `"${slug}" bulunamadı.` : `"${slug}" not found.`);
 
@@ -672,9 +651,7 @@ window.addEventListener('ao-lang', () => {
 });
 
 /* ── Boot ── */
-aoInit({ showBack: true, backHref: 'aonware-index.html#blog' });
+aoInit({ showBack: true, backHref: '/#blog' });
 loadPost();
 </script>
-
-</body>
-</html>
+{% endblock scripts %}

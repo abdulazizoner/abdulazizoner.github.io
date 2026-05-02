@@ -10,9 +10,11 @@ api = NinjaAPI(title="Aonware.ai API")
 api.add_router("/blog", blog_router)
 api.add_router("/portfolio", portfolio_router)
 
+
 @api.get("/health")
 def health_check(request):
     return {"status": "ok"}
+
 
 urlpatterns = [
     path("", api.urls),
