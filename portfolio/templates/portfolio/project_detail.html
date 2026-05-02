@@ -1,32 +1,12 @@
-<!DOCTYPE html>
-<html lang="tr" class="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project — Aonware.ai</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="base.css" />
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: {
-        colors: { bg:'#0d1117', surface:'#161b22', border:'#21262d', subtle:'#30363d',
-                  indigo:'#7c6bc9', blue:'#5CACF0', emerald:'#3ddba8', muted:'#8b949e', dim:'#484f58' },
-        fontFamily: { sans:['Inter','sans-serif'], mono:['JetBrains Mono','monospace'] },
-      }}
-    }
-  </script>
-  <style>
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Project — Aonware.ai{% endblock %}
+
+{% block content %}
+<style>
     .detail-skeleton { display: grid; gap: 1.5rem; }
-  </style>
-</head>
-<body class="flex flex-col">
-
-<div id="progress-bar"></div>
-<nav id="ao-nav" class="nav-glass sticky top-0 z-50"></nav>
-
-<!-- ══════════════════ CONTENT ══════════════════ -->
+</style>
 <main class="flex-grow">
   <div class="max-w-5xl mx-auto px-6 py-14">
 
@@ -199,16 +179,11 @@
 
   </div>
 </main>
+{% endblock content %}
 
-<footer id="ao-footer" style="border-top:1px solid var(--border);background:color-mix(in srgb,var(--surf) 50%,transparent)"></footer>
-
-<script src="base.js"></script>
+{% block scripts %}
 <script>
-'use strict';
-
-const API  = AO.API;
-const slug = AO.getSlug();
-const lang = () => getLang();
+const slug = window.location.pathname.split("/").filter(Boolean).pop();
 
 /* ── Fetch project ── */
 async function loadProject() {
@@ -218,7 +193,7 @@ async function loadProject() {
   const errMsg  = document.getElementById('err-msg');
   const errHint = document.getElementById('err-hint');
 
-  if (!slug) {
+    if (!slug) {
     loading.classList.add('hidden');
     error.classList.remove('hidden');
     errMsg.textContent  = lang() === 'tr' ? 'Slug parametresi eksik.' : 'Missing slug parameter.';
@@ -230,7 +205,8 @@ async function loadProject() {
     /* Try by slug via list endpoint first (API doesn't expose /projects/{slug} by default) */
     const res = await fetch(`${API}/portfolio/projects`, { headers:{ Accept:'application/json' } });
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-    const all = await res.json();
+    let all = await res.json();
+    if (all.items) all = all.items;
     const p   = all.find(x => x.slug === slug);
 
     if (!p) throw new Error(lang() === 'tr' ? `"${slug}" projesi bulunamadı.` : `Project "${slug}" not found.`);
@@ -292,9 +268,8 @@ async function loadProject() {
       : 'Ensure the API is running at http://127.0.0.1:8000';
   }
 }
-
-aoInit({ showBack: true, backHref: 'aonware-index.html#portfolio' });
+/* ── Boot ── */
+aoInit({ showBack: true, backHref: '/#portfolio' });
 loadProject();
 </script>
-</body>
-</html>
+{% endblock scripts %}

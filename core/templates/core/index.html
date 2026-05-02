@@ -120,11 +120,12 @@
             try {
                 const response = await fetch(`${API_BASE}/portfolio/projects`);
                 if (!response.ok) throw new Error('Network response was not ok');
-                const projects = await response.json();
+                let projects = await response.json();
+                if (projects.items) projects = projects.items;
 
                 loading.classList.add('hidden');
 
-                if (projects.length === 0) {
+                if (projects.items && projects.items.length === 0) {
                     emptyState.classList.remove('hidden');
                 } else {
                     container.classList.remove('hidden');
@@ -159,11 +160,12 @@
             try {
                 const response = await fetch(`${API_BASE}/blog/posts`);
                 if (!response.ok) throw new Error('Network response was not ok');
-                const posts = await response.json();
+                let posts = await response.json();
+                if (posts.items) posts = posts.items;
 
                 loading.classList.add('hidden');
 
-                if (posts.length === 0) {
+                if (posts.items && posts.items.length === 0) {
                     emptyState.classList.remove('hidden');
                 } else {
                     container.classList.remove('hidden');
