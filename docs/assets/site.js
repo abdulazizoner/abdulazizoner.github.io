@@ -2,12 +2,40 @@
 
 (function () {
   const STORAGE_THEME = 'portfolio-theme';
+  const STORAGE_LANG = 'portfolio-lang';
+  const THEME_COLORS = { dark: '#0d1117', light: '#f8fafc' };
+
+  const PAGE_TITLES = {
+    home: {
+      en: 'Abdülaziz Öner — AI & Data Engineering Student',
+      tr: 'Abdülaziz Öner — Yapay Zeka ve Veri Mühendisliği Öğrencisi',
+    },
+    trendai: {
+      en: 'TrendAI — Case Study | Abdülaziz Öner',
+      tr: 'TrendAI — Proje İncelemesi | Abdülaziz Öner',
+    },
+    legal: {
+      en: 'Turkish Legal-Risk NLP — Case Study | Abdülaziz Öner',
+      tr: 'Türkçe Hukuki Risk NLP — Proje İncelemesi | Abdülaziz Öner',
+    },
+    firat: {
+      en: 'FıratAsistan — Case Study | Abdülaziz Öner',
+      tr: 'FıratAsistan — Proje İncelemesi | Abdülaziz Öner',
+    },
+    error404: {
+      en: '404 — Abdülaziz Öner',
+      tr: '404 — Abdülaziz Öner',
+    },
+  };
 
   function applyTheme(mode) {
     const html = document.documentElement;
     html.classList.remove('dark', 'light');
     html.classList.add(mode);
     localStorage.setItem(STORAGE_THEME, mode);
+
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute('content', THEME_COLORS[mode] || THEME_COLORS.dark);
 
     const track = document.getElementById('theme-track');
     const sun = document.getElementById('icon-sun');
@@ -23,6 +51,130 @@
   function toggleTheme() {
     const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     applyTheme(current === 'dark' ? 'light' : 'dark');
+  }
+
+  function applyLang(lang) {
+    document.documentElement.lang = lang;
+    localStorage.setItem(STORAGE_LANG, lang);
+
+    document.querySelectorAll('[data-en]').forEach((el) => {
+      const val = el.getAttribute('data-' + lang);
+      if (val == null) return;
+      if (el.hasAttribute('data-i18n-html') || /<[a-z][\s\S]*>/i.test(val)) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    });
+
+    document.querySelectorAll('[data-lang-block]').forEach((el) => {
+      el.hidden = el.getAttribute('data-lang-block') !== lang;
+    });
+
+    document.querySelectorAll('[data-lang-btn]').forEach((btn) => {
+      const active = btn.getAttribute('data-lang-btn') === lang;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    });
+
+    const page = document.body.getAttribute('data-page');
+    if (page && PAGE_TITLES[page]) {
+      const title = document.querySelector('title');
+      if (title) title.textContent = PAGE_TITLES[page][lang];
+    }
+
+    window.dispatchEvent(new CustomEvent('portfolio-lang', { detail: lang }));
+    debouncedStabilizeI18n();
+  }
+
+  let stabilizeTimer = null;
+  let stabilizing = false;
+
+  function measureI18nText(el, attr, isHtml) {
+    const val = el.getAttribute(attr);
+    if (!val) return 0;
+
+    const width = el.getBoundingClientRect().width;
+    if (width <= 0) return 0;
+
+    const probe = document.createElement(el.tagName.toLowerCase());
+    probe.className = el.className;
+    probe.style.cssText =
+      'position:absolute;visibility:hidden;pointer-events:none;left:0;width:' + width + 'px;height:auto;min-height:0';
+    if (isHtml) probe.innerHTML = val;
+    else probe.textContent = val;
+
+    el.parentNode.appendChild(probe);
+    const height = probe.offsetHeight;
+    probe.remove();
+    return height;
+  }
+
+  function stabilizeI18nHeights() {
+    if (stabilizing) return;
+    stabilizing = true;
+
+    requestAnimationFrame(() => {
+      document.querySelectorAll('[data-i18n-stable]').forEach((el) => {
+        el.style.minHeight = '';
+      });
+
+      document.querySelectorAll('[data-i18n-stable]').forEach((el) => {
+        const blocks = el.querySelectorAll(':scope > [data-lang-block]');
+        if (blocks.length >= 2) {
+          let maxH = 0;
+          const saved = [];
+
+          blocks.forEach((block) => {
+            saved.push({ block, hidden: block.hidden });
+            block.hidden = false;
+            block.style.visibility = 'hidden';
+            block.style.position = 'absolute';
+            block.style.left = '0';
+            block.style.right = '0';
+            block.style.top = '0';
+            maxH = Math.max(maxH, block.scrollHeight);
+          });
+
+          saved.forEach(({ block, hidden }) => {
+            block.style.visibility = '';
+            block.style.position = '';
+            block.style.left = '';
+            block.style.right = '';
+            block.style.top = '';
+            block.hidden = hidden;
+          });
+
+          if (maxH > 0) el.style.minHeight = maxH + 'px';
+          return;
+        }
+
+        if (!el.hasAttribute('data-en') || !el.hasAttribute('data-tr')) return;
+
+        const isHtml =
+          el.hasAttribute('data-i18n-html') ||
+          /<[a-z][\s\S]*>/i.test(el.getAttribute('data-en') || '') ||
+          /<[a-z][\s\S]*>/i.test(el.getAttribute('data-tr') || '');
+
+        const maxH = Math.max(measureI18nText(el, 'data-en', isHtml), measureI18nText(el, 'data-tr', isHtml));
+        if (maxH > 0) el.style.minHeight = maxH + 'px';
+      });
+
+      stabilizing = false;
+    });
+  }
+
+  function debouncedStabilizeI18n() {
+    if (stabilizeTimer) clearTimeout(stabilizeTimer);
+    stabilizeTimer = setTimeout(stabilizeI18nHeights, 80);
+  }
+
+  function initLangToggle() {
+    document.querySelectorAll('[data-lang-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        applyLang(btn.getAttribute('data-lang-btn') || 'en');
+      });
+    });
   }
 
   function initProgressBar() {
@@ -67,7 +219,10 @@
 
     function setMenuOpen(open) {
       toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      const labelEn = open ? 'Close menu' : 'Open menu';
+      const labelTr = open ? 'Menüyü kapat' : 'Menüyü aç';
+      const lang = localStorage.getItem(STORAGE_LANG) || 'en';
+      toggle.setAttribute('aria-label', lang === 'tr' ? labelTr : labelEn);
       mobile.classList.toggle('open', open);
       document.body.style.overflow = open ? 'hidden' : '';
     }
@@ -85,6 +240,13 @@
         setMenuOpen(false);
       }
     });
+
+    window.addEventListener('portfolio-lang', (e) => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      const labelEn = open ? 'Close menu' : 'Open menu';
+      const labelTr = open ? 'Menüyü kapat' : 'Menüyü aç';
+      toggle.setAttribute('aria-label', e.detail === 'tr' ? labelTr : labelEn);
+    });
   }
 
   function initYear() {
@@ -94,14 +256,20 @@
 
   function init() {
     applyTheme(localStorage.getItem(STORAGE_THEME) || 'dark');
+    applyLang(localStorage.getItem(STORAGE_LANG) || 'en');
+    initLangToggle();
     initProgressBar();
     initReveal();
     initMobileNav();
     initYear();
 
     const themeBtn = document.getElementById('theme-btn');
-    if (themeBtn) {
-      themeBtn.addEventListener('click', toggleTheme);
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+
+    stabilizeI18nHeights();
+    window.addEventListener('resize', debouncedStabilizeI18n, { passive: true });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(debouncedStabilizeI18n);
     }
   }
 

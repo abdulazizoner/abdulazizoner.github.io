@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Turkish Legal-Risk Text Classification case study — a human-review decision-support prototype for NLP preprocessing and legal-risk signal analysis." />
+  <meta name="author" content="Abdülaziz Öner" />
+  <link rel="canonical" href="https://abdulazizoner.github.io/Aonware.ai/projects/legal-risk-nlp.html" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="../assets/favicon.svg" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta property="og:title" content="Turkish Legal-Risk NLP — Case Study | Abdülaziz Öner" />
+  <meta property="og:description" content="Decision-support prototype for Turkish text classification with human-in-the-loop review." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://abdulazizoner.github.io/Aonware.ai/projects/legal-risk-nlp.html" />
+  <meta property="og:image" content="https://abdulazizoner.github.io/Aonware.ai/assets/og-image.svg" />
+  <title>Turkish Legal-Risk NLP — Case Study | Abdülaziz Öner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/site.css" />
+</head>
+<body data-page="legal">
+  <a class="skip-link" href="#main" data-en="Skip to content" data-tr="İçeriğe atla">Skip to content</a>
+  <div id="progress-bar" aria-hidden="true"></div>
+
+  <header class="nav" role="banner">
+    <div class="container case-nav">
+      <div class="nav-inner">
+        <a class="back-link" href="../index.html#projects">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          <span data-i18n-stable data-en="Back to projects" data-tr="Projelere dön">Back to projects</span>
+        </a>
+        <div class="nav-actions">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-btn active" data-lang-btn="en" aria-pressed="true">EN</button>
+            <button type="button" class="lang-btn" data-lang-btn="tr" aria-pressed="false">TR</button>
+          </div>
+          <button type="button" id="theme-btn" class="theme-btn" aria-label="Toggle color theme">
+            <svg id="icon-sun" class="hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg id="icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+            <span class="toggle-track" id="theme-track"><span class="toggle-thumb"></span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="case-study">
+    <div class="container">
+
+      <div class="case-study-i18n" data-i18n-stable>
+
+      <div data-lang-block="en">
+        <header class="case-study-header">
+          <span class="status status-prototype">Prototype</span>
+          <h1>Turkish Legal-Risk Text Classification</h1>
+          <p class="case-study-lead">A decision-support prototype for analyzing public Turkish social media text — designed to assist human reviewers with NLP preprocessing and signal highlighting, not to automate legal enforcement or provide legal advice.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Overview</h2>
+          <p>This project explores how NLP techniques can support — not replace — human judgment when reviewing public Turkish social media content for potential legal-risk signals. The motivation is educational and technical: understanding preprocessing, classification, and keyword matching in a sensitive domain where accuracy errors have real consequences.</p>
+          <p>The prototype is explicitly framed as human-in-the-loop decision support. It does not report content to authorities, does not make binding legal determinations, and does not provide legal advice. Any flagged output is meant for a person to review, contextualize, and decide upon. KVKK (Turkey's personal data protection law) and GDPR principles inform how I think about data scope, minimization, and purpose limitation — even in a student prototype.</p>
+          <p>I am building this to learn responsible NLP design in a high-stakes context. The system is not deployed, not connected to live moderation pipelines, and not validated for legal accuracy. It is an experimental tool for studying pipeline design and ethical constraints.</p>
+
+          <h2>Problem</h2>
+          <p>Public Turkish social media text may contain language that warrants careful review for legal-risk signals, but fully automated classification is risky. Models can produce false positives on sarcasm, quoted speech, or ambiguous phrasing. They can miss context that a human reader would catch. Automating enforcement decisions raises ethical concerns around privacy, due process, and overreach. A more responsible starting point is tooling that helps a reviewer prioritize and understand text — with a human always in the loop.</p>
+
+          <h2>Goals</h2>
+          <ul>
+            <li>Build a Turkish text preprocessing pipeline suitable for social media-style input</li>
+            <li>Experiment with classification approaches that surface legal-risk signals as review hints</li>
+            <li>Implement keyword and legal-concept matching to complement model outputs</li>
+            <li>Design reviewer-facing output that presents signals clearly without claiming certainty</li>
+            <li>Keep human review mandatory — no automated reporting or authority integration</li>
+            <li>Document ethical constraints, KVKK/GDPR awareness, and known failure modes</li>
+          </ul>
+
+          <h2>System / workflow</h2>
+          <div class="workflow">Public text input (sample / test dataset)
+  → Turkish normalization (lowercasing, punctuation, token cleanup)
+  → Preprocessing &amp; feature extraction
+  → Classification model / rule layer (risk signal scores)
+  → Keyword &amp; legal-concept pattern matching
+  → Aggregated review output (flags, scores, matched terms)
+  → Human reviewer reads original text + system hints
+  → Human makes final judgment (accept / reject / escalate manually)
+  → No automated authority reporting</div>
+
+          <h2>Technical focus</h2>
+          <ul>
+            <li>Python NLP preprocessing for Turkish text</li>
+            <li>Text classification experiments (baseline models, feature-based approaches)</li>
+            <li>Rule-based and model-assisted keyword/concept matching</li>
+            <li>Sentiment analysis as a supplementary signal — not a sole decision factor</li>
+            <li>Structured output format for reviewer-facing results</li>
+            <li>Documentation of false positive patterns and evaluation limitations</li>
+          </ul>
+
+          <h2>What I am building</h2>
+          <ul>
+            <li>Turkish text normalization and cleaning utilities for short-form social content</li>
+            <li>Classification pipeline that outputs risk signal scores with confidence caveats</li>
+            <li>Keyword and legal-concept matcher to highlight terms worth manual inspection</li>
+            <li>Prototype review interface or structured JSON/text output for human evaluation</li>
+            <li>Test notebooks documenting preprocessing choices and classification experiments</li>
+            <li>Ethics and limitations documentation (no legal advice, no authority claims)</li>
+          </ul>
+
+          <h2>Current state</h2>
+          <p>The project is a prototype under active development. It has not been deployed in any official, commercial, or enforcement context. There are no claims of real-world usage, validated legal accuracy, or integration with authorities or platforms. All outputs are intended for experimental and educational review on controlled sample data. I do not present this as a finished moderation product.</p>
+
+          <h2>Limitations and risk awareness</h2>
+          <p>False positives are expected: sarcasm, jokes, quoted material, and political rhetoric can trigger signals that a human would dismiss. Legal ambiguity is inherent — NLP models do not interpret law and cannot account for full situational context. The prototype does not handle dialect variation, code-switching, or multimedia context (images, threads) robustly. This is not legal advice, not a compliance tool, and not suitable for automated enforcement. Any use beyond learning would require legal review, domain expert validation, and formal governance — none of which this student project provides.</p>
+
+          <h2>Next steps</h2>
+          <ul>
+            <li>Expand Turkish preprocessing handling for informal spelling and social abbreviations</li>
+            <li>Build a small labeled evaluation set and track precision/recall on known examples</li>
+            <li>Document false positive cases (sarcasm, quotes) and adjust rules where possible</li>
+            <li>Improve reviewer output layout to separate signals from original text clearly</li>
+            <li>Write a clearer ethics section covering KVKK/GDPR data scope assumptions</li>
+            <li>Explore human-in-the-loop evaluation protocol before any broader testing</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Back to projects</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+          </div>
+        </article>
+      </div>
+
+      <div data-lang-block="tr" hidden>
+        <header class="case-study-header">
+          <span class="status status-prototype">Prototip</span>
+          <h1>Türkçe Hukuki Risk Metin Sınıflandırması</h1>
+          <p class="case-study-lead">Kamusal Türkçe sosyal medya metinlerini analiz etmek için karar destek prototipi — NLP ön işleme ve sinyal vurgulama ile insan incelemecilere yardımcı olmak üzere tasarlandı; hukuki uygulamayı otomatikleştirmek veya hukuki tavsiye vermek için değil.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Genel bakış</h2>
+          <p>Bu proje, kamusal Türkçe sosyal medya içeriğinde potansiyel hukuki risk sinyalleri için inceleme yapılırken NLP tekniklerinin insan yargısını destekleyebileceğini — ikame edemeyeceğini — keşfediyor. Motivasyon eğitimsel ve teknik: hassas bir alanda ön işleme, sınıflandırma ve anahtar kelime eşleştirmesini anlamak; doğruluk hatalarının gerçek sonuçları olabileceği bir bağlamda.</p>
+          <p>Prototip açıkça insan-döngülü karar destek çerçevesinde konumlandırıldı. İçeriği yetkililere bildirmiyor, bağlayıcı hukuki karar vermiyor ve hukuki tavsiye sunmuyor. İşaretlenen her çıktı, bir kişinin incelemesi, bağlama oturtması ve karar vermesi içindir. KVKK ve GDPR ilkeleri, veri kapsamı, minimizasyon ve amaç sınırlaması hakkında düşünme biçimime rehberlik ediyor — öğrenci prototipi olsa bile.</p>
+          <p>Yüksek riskli bir bağlamda sorumlu NLP tasarımını öğrenmek için geliştiriyorum. Sistem dağıtılmadı, canlı moderasyon hatlarına bağlı değil ve hukuki doğruluk için validate edilmedi. Hat tasarımını ve etik kısıtları incelemek için deneysel bir araç.</p>
+
+          <h2>Problem</h2>
+          <p>Kamusal Türkçe sosyal medya metinleri hukuki risk sinyalleri açısından dikkatli incelenmeyi gerektirebilir; ancak tam otomatik sınıflandırma risklidir. Modeller ironi, alıntılanan konuşma veya belirsiz ifadelerde yanlış pozitif üretebilir. İnsan okuyucunun yakalayacağı bağlamı kaçırabilir. Uygulama kararlarını otomatikleştirmek gizlilik, usul hakkı ve aşırı müdahale endişelerini artırır. Daha sorumlu bir başlangıç noktası, incelemecinin metni önceliklendirmesine ve anlamasına yardımcı olan — insanın her zaman döngüde olduğu — araçlardır.</p>
+
+          <h2>Hedefler</h2>
+          <ul>
+            <li>Sosyal medya tarzı girdi için uygun Türkçe metin ön işleme hattı kurmak</li>
+            <li>Hukuki risk sinyallerini inceleme ipuçları olarak yüzeye çıkaran sınıflandırma yaklaşımları denemek</li>
+            <li>Model çıktılarını tamamlamak için anahtar kelime ve hukuki kavram eşleştirmesi uygulamak</li>
+            <li>Sinyalleri net sunan, kesinlik iddiası taşımayan incelemeci odaklı çıktı tasarlamak</li>
+            <li>İnsan incelemesini zorunlu tutmak — otomatik bildirim veya yetkili entegrasyonu yok</li>
+            <li>Etik kısıtları, KVKK/GDPR farkındalığını ve bilinen hata modlarını belgelemek</li>
+          </ul>
+
+          <h2>Sistem / iş akışı</h2>
+          <div class="workflow">Kamusal metin girişi (örnek / test veri seti)
+  → Türkçe normalizasyon (küçük harf, noktalama, token temizliği)
+  → Ön işleme ve özellik çıkarma
+  → Sınıflandırma modeli / kural katmanı (risk sinyali skorları)
+  → Anahtar kelime ve hukuki kavram desen eşleştirmesi
+  → Birleştirilmiş inceleme çıktısı (bayraklar, skorlar, eşleşen terimler)
+  → İnsan incelemeci orijinal metin + sistem ipuçlarını okur
+  → İnsan nihai kararı verir (kabul / red / manuel yükseltme)
+  → Otomatik yetkili bildirimi yok</div>
+
+          <h2>Teknik odak</h2>
+          <ul>
+            <li>Türkçe metin için Python NLP ön işleme</li>
+            <li>Metin sınıflandırma deneyleri (temel modeller, özellik tabanlı yaklaşımlar)</li>
+            <li>Kural tabanlı ve model destekli anahtar kelime/kavram eşleştirmesi</li>
+            <li>Duygu analizi tamamlayıcı sinyal olarak — tek başına karar faktörü değil</li>
+            <li>İncelemeci odaklı sonuçlar için yapılandırılmış çıktı biçimi</li>
+            <li>Yanlış pozitif desenlerinin ve değerlendirme sınırlarının dokümantasyonu</li>
+          </ul>
+
+          <h2>Geliştirdiklerim</h2>
+          <ul>
+            <li>Kısa formlu sosyal içerik için Türkçe metin normalizasyon ve temizleme yardımcıları</li>
+            <li>Güven uyarılarıyla risk sinyali skorları üreten sınıflandırma hattı</li>
+            <li>Manuel incelemeye değer terimleri vurgulayan anahtar kelime ve hukuki kavram eşleştiricisi</li>
+            <li>İnsan değerlendirmesi için prototip inceleme arayüzü veya yapılandırılmış JSON/metin çıktısı</li>
+            <li>Ön işleme seçimlerini ve sınıflandırma deneylerini belgeleyen test not defterleri</li>
+            <li>Etik ve sınırlamalar dokümantasyonu (hukuki tavsiye yok, yetkili iddiası yok)</li>
+          </ul>
+
+          <h2>Güncel durum</h2>
+          <p>Proje aktif geliştirme altındaki bir prototip. Resmi, ticari veya uygulama bağlamında dağıtılmadı. Gerçek dünya kullanımı, doğrulanmış hukuki doğruluk veya yetkili/platform entegrasyonu iddiası yok. Tüm çıktılar kontrollü örnek veri üzerinde deneysel ve eğitim amaçlı inceleme içindir. Bunu bitmiş bir moderasyon ürünü olarak sunmuyorum.</p>
+
+          <h2>Sınırlamalar ve risk farkındalığı</h2>
+          <p>Yanlış pozitifler beklenir: ironi, şakalar, alıntılar ve siyasi retorik, insanın reddedeceği sinyalleri tetikleyebilir. Hukuki belirsizlik kaçınılmazdır — NLP modelleri hukuku yorumlamaz ve tam durumsal bağlamı hesaba katamaz. Prototip lehçe varyasyonu, kod değiştirme veya multimedya bağlamını (görseller, diziler) sağlam biçimde ele almıyor. Bu hukuki tavsiye değil, uyumluluk aracı değil ve otomatik uygulama için uygun değil. Öğrenmenin ötesinde kullanım hukuki inceleme, alan uzmanı doğrulaması ve resmi yönetişim gerektirir — bunların hiçbiri bu öğrenci projesinde yok.</p>
+
+          <h2>Sonraki adımlar</h2>
+          <ul>
+            <li>Gayri resmi yazım ve sosyal kısaltmalar için Türkçe ön işlemeyi genişletmek</li>
+            <li>Küçük etiketli bir değerlendirme seti oluşturup bilinen örneklerde precision/recall takibi</li>
+            <li>Yanlış pozitif vakaları (ironi, alıntılar) belgeleyip kuralları mümkün olduğunca ayarlamak</li>
+            <li>İncelemeci çıktı düzenini sinyalleri orijinal metinden net ayıracak şekilde iyileştirmek</li>
+            <li>KVKK/GDPR veri kapsamı varsayımlarını kapsayan daha net etik bölüm yazmak</li>
+            <li>Daha geniş test öncesinde insan-döngülü değerlendirme protokolü keşfetmek</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Projelere dön</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profili</a>
+          </div>
+        </article>
+      </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p class="footer-copy">Abdülaziz Öner © <span id="year"></span> — <span data-i18n-stable data-en="Built for open learning." data-tr="Herkese açık öğrenme için inşa edildi.">Built for open learning.</span></p>
+    </div>
+  </footer>
+  <script src="../assets/site.js"></script>
+</body>
+</html>

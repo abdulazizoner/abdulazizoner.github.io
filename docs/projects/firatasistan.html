@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FıratAsistan case study — an ongoing university-focused AI assistant concept using RAG, document ingestion, and source-grounded response design." />
+  <meta name="author" content="Abdülaziz Öner" />
+  <link rel="canonical" href="https://abdulazizoner.github.io/Aonware.ai/projects/firatasistan.html" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="../assets/favicon.svg" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta property="og:title" content="FıratAsistan — Case Study | Abdülaziz Öner" />
+  <meta property="og:description" content="University-focused AI assistant concept with RAG, document ingestion, and privacy-aware design." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://abdulazizoner.github.io/Aonware.ai/projects/firatasistan.html" />
+  <meta property="og:image" content="https://abdulazizoner.github.io/Aonware.ai/assets/og-image.svg" />
+  <title>FıratAsistan — Case Study | Abdülaziz Öner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/site.css" />
+</head>
+<body data-page="firat">
+  <a class="skip-link" href="#main" data-en="Skip to content" data-tr="İçeriğe atla">Skip to content</a>
+  <div id="progress-bar" aria-hidden="true"></div>
+
+  <header class="nav" role="banner">
+    <div class="container case-nav">
+      <div class="nav-inner">
+        <a class="back-link" href="../index.html#projects">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          <span data-i18n-stable data-en="Back to projects" data-tr="Projelere dön">Back to projects</span>
+        </a>
+        <div class="nav-actions">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-btn active" data-lang-btn="en" aria-pressed="true">EN</button>
+            <button type="button" class="lang-btn" data-lang-btn="tr" aria-pressed="false">TR</button>
+          </div>
+          <button type="button" id="theme-btn" class="theme-btn" aria-label="Toggle color theme">
+            <svg id="icon-sun" class="hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg id="icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+            <span class="toggle-track" id="theme-track"><span class="toggle-thumb"></span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="case-study">
+    <div class="container">
+
+      <div class="case-study-i18n" data-i18n-stable>
+
+      <div data-lang-block="en">
+        <header class="case-study-header">
+          <span class="status status-ongoing">Ongoing</span>
+          <h1>FıratAsistan</h1>
+          <p class="case-study-lead">A university-focused AI assistant concept that helps students explore answers from educational and institutional documents through retrieval-augmented generation, vector search, and source-grounded chat design.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Overview</h2>
+          <p>FıratAsistan is an ongoing personal project exploring how a RAG-based assistant could help students find information in scattered educational documents — syllabi, regulations, guides, and departmental notices. I am a student at Fırat University studying AI &amp; Data Engineering, and this project grew from a practical question: how can retrieval workflows make document-heavy university information easier to query without relying on generic chatbot answers?</p>
+          <p>The concept centers on document ingestion, Turkish content handling, vector indexing with Chroma-like storage, and answer generation that references retrieved source sections. I am learning how to design the pipeline end to end: from PDF/text ingestion through chunking, embedding, retrieval, and a simple chat frontend connected to a backend API.</p>
+          <p>This is not an official Fırat University product. It has not been deployed by the university, has no institutional approval, and has no real users at scale. I present it honestly as a student learning project that explores production-readiness challenges — accuracy, privacy, and reliability — without overclaiming deployment or adoption.</p>
+
+          <h2>Problem</h2>
+          <p>Students often need information spread across many documents with different formats, update cycles, and writing styles. Searching manually is slow, and generic LLM chatbots can hallucinate answers or ignore the specific institutional context students need. A useful assistant should retrieve relevant document sections first and ground responses in that material, so users can verify answers against original sources.</p>
+
+          <h2>Goals</h2>
+          <ul>
+            <li>Build a document ingestion pipeline for educational and institutional text (PDF, plain text)</li>
+            <li>Handle Turkish content in preprocessing, chunking, and retrieval workflows</li>
+            <li>Implement vector indexing and semantic search using Chroma-like storage concepts</li>
+            <li>Design a RAG flow that passes retrieved chunks to an LLM with citation-style references</li>
+            <li>Connect a simple backend API to a chat frontend for interactive querying</li>
+            <li>Think through KVKK-aware data scope, permissions, and responsible deployment constraints</li>
+          </ul>
+
+          <h2>System / workflow</h2>
+          <div class="workflow">Document upload (PDF / text files)
+  → Text extraction &amp; Turkish preprocessing
+  → Chunking with metadata (doc name, section, page)
+  → Embedding generation
+  → Store in Chroma-like vector database
+  → Student query via chat frontend
+  → Backend API receives query
+  → Embed query → retrieve top-k relevant chunks
+  → Build grounded prompt with source context
+  → LLM generates answer with references
+  → Display response + source citations to user</div>
+
+          <h2>Technical focus</h2>
+          <ul>
+            <li>RAG / retrieval-augmented generation architecture</li>
+            <li>Document ingestion, text extraction, and chunking strategies</li>
+            <li>Vector indexing and semantic retrieval (Chroma-like storage)</li>
+            <li>Turkish content handling in preprocessing and embedding quality</li>
+            <li>Backend API design connecting retrieval service to chat frontend</li>
+            <li>Testing, observability, and deployment planning as improvement areas</li>
+          </ul>
+
+          <h2>What I am building</h2>
+          <ul>
+            <li>Python ingestion scripts for PDF and text document processing</li>
+            <li>Chunking pipeline with metadata tags for document source tracking</li>
+            <li>Vector store setup and embedding workflow for semantic search</li>
+            <li>Backend retrieval API that returns ranked chunks for a given query</li>
+            <li>Prototype chat interface for querying ingested documents</li>
+            <li>Documentation on architecture, known gaps, and privacy considerations</li>
+          </ul>
+
+          <h2>Current state</h2>
+          <p>The project is in active development as a personal learning effort adjacent to my university studies. Core ingestion and retrieval components are being built incrementally. There is no official deployment by Fırat University, no confirmed institutional endorsement, and no claim of real users or production traffic. Answer accuracy is not guaranteed — responses can be incomplete, outdated, or incorrect when retrieval misses relevant chunks or the LLM misinterprets context. Users should always verify against original documents.</p>
+
+          <h2>Limitations and risk awareness</h2>
+          <p>Document coverage is limited to what has been manually ingested — the assistant cannot answer questions about material not in the index. Turkish NLP quality depends on preprocessing choices and embedding model behavior, which I am still evaluating. Hallucination remains a risk even with RAG: the model may add details not present in retrieved chunks. There is no formal KVKK compliance review, no access control system for sensitive documents, and no unsupported operational metrics or support guarantees. This must not be treated as an authoritative university information source.</p>
+
+          <h2>Next steps</h2>
+          <ul>
+            <li>Improve PDF extraction quality and handle more document layout types</li>
+            <li>Tune chunk size and metadata for better retrieval on Turkish academic text</li>
+            <li>Add clearer citation formatting in chat responses</li>
+            <li>Build a small test query set and track retrieval relevance manually</li>
+            <li>Explore basic logging and error handling in the backend API</li>
+            <li>Document deployment options and privacy scope assumptions before any wider testing</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Back to projects</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+          </div>
+        </article>
+      </div>
+
+      <div data-lang-block="tr" hidden>
+        <header class="case-study-header">
+          <span class="status status-ongoing">Devam ediyor</span>
+          <h1>FıratAsistan</h1>
+          <p class="case-study-lead">Öğrencilerin eğitim ve kurumsal belgelerden yanıt aramasına yardımcı olmayı hedefleyen üniversite odaklı YZ asistan konsepti — retrieval-augmented generation, vektör arama ve kaynak temelli sohbet tasarımıyla.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Genel bakış</h2>
+          <p>FıratAsistan, RAG tabanlı bir asistanın öğrencilere dağınık eğitim belgelerinde — ders programları, yönetmelikler, kılavuzlar ve bölüm duyuruları — bilgi bulmada nasıl yardımcı olabileceğini keşfeden devam eden kişisel bir projedir. Fırat Üniversitesi'nde Yapay Zeka ve Veri Mühendisliği okuyorum; proje pratik bir sorudan doğdu: retrieval iş akışları, genel sohbet botu yanıtlarına bağımlı kalmadan belge yoğun üniversite bilgisini sorgulanabilir kılabilir mi?</p>
+          <p>Konsept belge alma, Türkçe içerik işleme, Chroma benzeri depolama ile vektör indeksleme ve alınan kaynak bölümlerine referans veren yanıt üretimi etrafında dönüyor. PDF/metin almadan parçalama, embedding, retrieval ve basit bir sohbet arayüzünün backend API'ye bağlanmasına kadar hattı uçtan uca tasarlamayı öğreniyorum.</p>
+          <p>Bu resmi bir Fırat Üniversitesi ürünü değil. Üniversite tarafından dağıtılmadı, kurumsal onayı yok ve ölçekte gerçek kullanıcı iddiası yok. Dağıtım veya benimsenme iddiası olmadan doğruluk, gizlilik ve güvenilirlik gibi üretime hazırlık zorluklarını keşfeden dürüst bir öğrenci öğrenme projesi olarak sunuyorum.</p>
+
+          <h2>Problem</h2>
+          <p>Öğrenciler genellikle farklı biçimlerde, güncelleme döngülerinde ve yazım stillerinde birçok belgeye yayılmış bilgiye ihtiyaç duyar. Manuel arama yavaştır; genel LLM sohbet botları halüsinasyon üretebilir veya öğrencilerin ihtiyaç duyduğu kurumsal bağlamı yok sayabilir. Yararlı bir asistan önce ilgili belge bölümlerini getirmeli ve yanıtları bu materyale dayandırmalı; böylece kullanıcılar cevapları orijinal kaynaklara karşı doğrulayabilir.</p>
+
+          <h2>Hedefler</h2>
+          <ul>
+            <li>Eğitim ve kurumsal metinler (PDF, düz metin) için belge alma hattı kurmak</li>
+            <li>Ön işleme, parçalama ve retrieval iş akışlarında Türkçe içeriği ele almak</li>
+            <li>Chroma benzeri depolama kavramlarıyla vektör indeksleme ve anlamsal arama uygulamak</li>
+            <li>Alınan parçaları atıf tarzı referanslarla LLM'e ileten RAG akışı tasarlamak</li>
+            <li>Etkileşimli sorgulama için basit backend API'yi sohbet arayüzüne bağlamak</li>
+            <li>KVKK odaklı veri kapsamı, izinler ve sorumlu dağıtım kısıtlarını düşünmek</li>
+          </ul>
+
+          <h2>Sistem / iş akışı</h2>
+          <div class="workflow">Belge yükleme (PDF / metin dosyaları)
+  → Metin çıkarma ve Türkçe ön işleme
+  → Metadata ile parçalama (belge adı, bölüm, sayfa)
+  → Embedding üretimi
+  → Chroma benzeri vektör veritabanına kayıt
+  → Öğrenci sorgusu (sohbet arayüzü)
+  → Backend API sorguyu alır
+  → Sorgu embedding → en iyi k ilgili parçayı getir
+  → Kaynak bağlamıyla dayanaklı prompt oluştur
+  → LLM referanslarla yanıt üretir
+  → Yanıt + kaynak atıfları kullanıcıya gösterilir</div>
+
+          <h2>Teknik odak</h2>
+          <ul>
+            <li>RAG / retrieval-augmented generation mimarisi</li>
+            <li>Belge alma, metin çıkarma ve parçalama stratejileri</li>
+            <li>Vektör indeksleme ve anlamsal retrieval (Chroma benzeri depolama)</li>
+            <li>Ön işleme ve embedding kalitesinde Türkçe içerik işleme</li>
+            <li>Retrieval servisini sohbet arayüzüne bağlayan backend API tasarımı</li>
+            <li>Test, gözlemlenebilirlik ve dağıtım planlaması iyileştirme alanları olarak</li>
+          </ul>
+
+          <h2>Geliştirdiklerim</h2>
+          <ul>
+            <li>PDF ve metin belge işleme için Python alma betikleri</li>
+            <li>Belge kaynağı takibi için metadata etiketli parçalama hattı</li>
+            <li>Anlamsal arama için vektör deposu kurulumu ve embedding iş akışı</li>
+            <li>Verilen sorgu için sıralı parçalar döndüren backend retrieval API</li>
+            <li>Alınan belgeleri sorgulamak için prototip sohbet arayüzü</li>
+            <li>Mimari, bilinen boşluklar ve gizlilik değerlendirmeleri dokümantasyonu</li>
+          </ul>
+
+          <h2>Güncel durum</h2>
+          <p>Proje üniversite çalışmalarıma bitişik kişisel bir öğrenme çabası olarak aktif geliştirmede. Temel alma ve retrieval bileşenleri aşamalı olarak inşa ediliyor. Fırat Üniversitesi tarafından resmi dağıtım yok, onaylanmış kurumsal destek yok ve gerçek kullanıcı veya üretim trafiği iddiası yok. Yanıt doğruluğu garanti değil — retrieval ilgili parçaları kaçırdığında veya LLM bağlamı yanlış yorumladığında yanıtlar eksik, güncel değil veya hatalı olabilir. Kullanıcılar her zaman orijinal belgelere karşı doğrulamalı.</p>
+
+          <h2>Sınırlamalar ve risk farkındalığı</h2>
+          <p>Belge kapsamı manuel olarak alınan materyalle sınırlı — asistan indekste olmayan konular hakkında yanıt veremez. Türkçe NLP kalitesi ön işleme seçimlerine ve embedding model davranışına bağlı; hâlâ değerlendiriyorum. RAG olsa bile halüsinasyon riski sürer: model alınan parçalarda olmayan ayrıntılar ekleyebilir. Resmi KVKK uyumluluk incelemesi, hassas belgeler için erişim kontrol sistemi veya çalışma süresi/destek garantisi yok. Resmi üniversite bilgi kaynağı olarak ele alınmamalı.</p>
+
+          <h2>Sonraki adımlar</h2>
+          <ul>
+            <li>PDF çıkarma kalitesini artırmak ve daha fazla belge düzeni türünü ele almak</li>
+            <li>Türkçe akademik metinde daha iyi retrieval için parça boyutu ve metadata ayarı</li>
+            <li>Sohbet yanıtlarında daha net atıf biçimlendirmesi eklemek</li>
+            <li>Küçük test sorgu seti oluşturup retrieval alakasını manuel takip etmek</li>
+            <li>Backend API'de temel günlük kaydı ve hata yönetimi keşfetmek</li>
+            <li>Daha geniş test öncesinde dağıtım seçeneklerini ve gizlilik kapsamı varsayımlarını belgelemek</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Projelere dön</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profili</a>
+          </div>
+        </article>
+      </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p class="footer-copy">Abdülaziz Öner © <span id="year"></span> — <span data-i18n-stable data-en="Built for open learning." data-tr="Herkese açık öğrenme için inşa edildi.">Built for open learning.</span></p>
+    </div>
+  </footer>
+  <script src="../assets/site.js"></script>
+</body>
+</html>

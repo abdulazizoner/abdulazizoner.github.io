@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TrendAI case study — an early-stage AI trend intelligence workspace with data ingestion, metadata organization, and RAG-based research chat." />
+  <meta name="author" content="Abdülaziz Öner" />
+  <link rel="canonical" href="https://abdulazizoner.github.io/Aonware.ai/projects/trendai.html" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="../assets/favicon.svg" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta property="og:title" content="TrendAI — Case Study | Abdülaziz Öner" />
+  <meta property="og:description" content="Early-stage AI trend intelligence workspace with RAG-based research workflows." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://abdulazizoner.github.io/Aonware.ai/projects/trendai.html" />
+  <meta property="og:image" content="https://abdulazizoner.github.io/Aonware.ai/assets/og-image.svg" />
+  <title>TrendAI — Case Study | Abdülaziz Öner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/site.css" />
+</head>
+<body data-page="trendai">
+  <a class="skip-link" href="#main" data-en="Skip to content" data-tr="İçeriğe atla">Skip to content</a>
+  <div id="progress-bar" aria-hidden="true"></div>
+
+  <header class="nav" role="banner">
+    <div class="container case-nav">
+      <div class="nav-inner">
+        <a class="back-link" href="../index.html#projects">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          <span data-i18n-stable data-en="Back to projects" data-tr="Projelere dön">Back to projects</span>
+        </a>
+        <div class="nav-actions">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-btn active" data-lang-btn="en" aria-pressed="true">EN</button>
+            <button type="button" class="lang-btn" data-lang-btn="tr" aria-pressed="false">TR</button>
+          </div>
+          <button type="button" id="theme-btn" class="theme-btn" aria-label="Toggle color theme">
+            <svg id="icon-sun" class="hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg id="icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+            <span class="toggle-track" id="theme-track"><span class="toggle-thumb"></span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="case-study">
+    <div class="container">
+
+      <div class="case-study-i18n" data-i18n-stable>
+
+      <div data-lang-block="en">
+        <header class="case-study-header">
+          <span class="status status-ongoing">Ongoing</span>
+          <h1>TrendAI</h1>
+          <p class="case-study-lead">A personal AI trend intelligence workspace for collecting, organizing, and querying information about AI models, tools, and industry developments through retrieval-augmented research workflows.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Overview</h2>
+          <p>TrendAI started as a learning project to understand how data ingestion, metadata design, and retrieval-augmented generation (RAG) can work together in a practical research tool. The AI landscape changes quickly — new models, frameworks, and product announcements appear across blogs, papers, GitHub, and social feeds. I wanted a structured way to capture what I read and ask questions against that material instead of relying on memory or generic chatbot answers.</p>
+          <p>The project is intentionally scoped as a personal workspace, not a commercial product. I am building it to practice end-to-end skills: collecting sources, normalizing content, attaching metadata, indexing for retrieval, and connecting a chat interface that grounds responses in ingested documents. Gemini API is the primary generation backend I am exploring for query handling and summarization.</p>
+          <p>At this stage, TrendAI is exploratory and incomplete. It does not claim to predict market trends, replace professional research, or provide real-time intelligence at production quality. It is a student project focused on learning how these systems are designed and where they break down.</p>
+
+          <h2>Problem</h2>
+          <p>AI research is fragmented across many sources with inconsistent formats and update cycles. Bookmarks, notes, and ad-hoc searches do not scale when you want to compare tools, track model releases, or revisit earlier readings with context. Generic LLM chat can answer fluently but often lacks grounding in your own collected material, which makes verification harder.</p>
+
+          <h2>Goals</h2>
+          <ul>
+            <li>Build a repeatable ingestion pipeline for AI-related articles, documentation, and release notes</li>
+            <li>Design a metadata schema that supports filtering by topic, date, source type, and tool category</li>
+            <li>Implement chunking and vector indexing for semantic retrieval over ingested content</li>
+            <li>Connect a RAG chat flow that retrieves relevant chunks before calling the Gemini API</li>
+            <li>Document retrieval quality issues and experiment with basic evaluation approaches</li>
+            <li>Keep the scope honest: learning project, not a deployed production service</li>
+          </ul>
+
+          <h2>System / workflow</h2>
+          <div class="workflow">Source input (URLs, notes, docs)
+  → Fetch &amp; parse content (Python scripts)
+  → Clean text &amp; extract metadata (title, date, tags, source URL)
+  → Chunk documents with overlap strategy
+  → Generate embeddings &amp; store in vector index
+  → User query
+  → Embed query → retrieve top-k chunks
+  → Build prompt with retrieved context
+  → Gemini API generation
+  → Response with source references (when available)</div>
+
+          <h2>Technical focus</h2>
+          <ul>
+            <li>Python-based ingestion scripts and text preprocessing</li>
+            <li>Metadata organization and source provenance tracking</li>
+            <li>Document chunking strategies and overlap tuning</li>
+            <li>Vector retrieval concepts (embedding models, similarity search)</li>
+            <li>Gemini API integration for grounded generation</li>
+            <li>Basic retrieval evaluation (manual spot-checks, relevance notes)</li>
+          </ul>
+
+          <h2>What I am building</h2>
+          <ul>
+            <li>Scripts to ingest and normalize content from selected AI news and documentation sources</li>
+            <li>A lightweight metadata layer for tagging models, tools, and trend categories</li>
+            <li>Chunk indexing workflow with vector storage for semantic search</li>
+            <li>A prototype RAG chat interface that passes retrieved context to Gemini</li>
+            <li>Notes and experiments on retrieval quality, chunk size, and prompt structure</li>
+            <li>Project documentation describing architecture decisions and known gaps</li>
+          </ul>
+
+          <h2>Current state</h2>
+          <p>The project is ongoing and at an early prototyping stage. Core ingestion and organization ideas are in place, and I am iteratively connecting retrieval and chat components. There is no public deployment, no user base, and no SLA or unsupported operational metrics. Output quality varies depending on source freshness, chunking choices, and retrieval accuracy. I treat every answer as something that still needs manual verification against original sources.</p>
+
+          <h2>Limitations and risk awareness</h2>
+          <p>Source freshness is a major constraint: ingested content can become outdated quickly, and the pipeline does not yet automate timely re-fetching for all sources. LLM responses can hallucinate or misinterpret retrieved context, especially when chunks are incomplete or ambiguous. Retrieval evaluation is still informal — I do not have rigorous benchmark metrics yet. This project does not predict market movements, investment outcomes, or competitive positioning. It is a research and learning tool, not financial or strategic advice.</p>
+
+          <h2>Next steps</h2>
+          <ul>
+            <li>Improve ingestion reliability and add clearer source timestamps</li>
+            <li>Experiment with chunk size, overlap, and metadata filters for better retrieval</li>
+            <li>Define a small set of test queries and track retrieval hit rate manually</li>
+            <li>Add clearer citation formatting in chat responses</li>
+            <li>Explore scheduled re-ingestion for high-priority sources</li>
+            <li>Document failure cases (missed retrieval, stale data, hallucination) for learning</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Back to projects</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+          </div>
+        </article>
+      </div>
+
+      <div data-lang-block="tr" hidden>
+        <header class="case-study-header">
+          <span class="status status-ongoing">Devam ediyor</span>
+          <h1>TrendAI</h1>
+          <p class="case-study-lead">YZ modelleri, araçları ve sektör gelişmeleri hakkında bilgi toplamak, düzenlemek ve retrieval-augmented araştırma iş akışlarıyla sorgulamak için kişisel bir yapay zeka trend istihbarat alanı.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Genel bakış</h2>
+          <p>TrendAI, veri alma, metadata tasarımı ve retrieval-augmented generation (RAG) bileşenlerinin pratik bir araştırma aracında nasıl bir araya geldiğini anlamak için başladığım bir öğrenme projesi. YZ ekosistemi hızla değişiyor — yeni modeller, framework'ler ve ürün duyuruları bloglar, makaleler, GitHub ve sosyal medya akışlarına dağılmış durumda. Okuduklarımı yapılandırılmış biçimde kaydetmek ve bu materyale dayalı sorular sormak istedim; hafızaya veya genel sohbet botu yanıtlarına bağımlı kalmak yerine.</p>
+          <p>Proje bilinçli olarak kişisel bir çalışma alanı olarak kapsamlandırıldı; ticari bir ürün değil. Uçtan uca becerileri pratik etmek için geliştiriyorum: kaynak toplama, içerik normalizasyonu, metadata ekleme, retrieval için indeksleme ve yanıtları alınan belgelere dayandıran bir sohbet arayüzü. Sorgu işleme ve özetleme için birincil üretim backend'i olarak Gemini API'yi keşfediyorum.</p>
+          <p>Bu aşamada TrendAI keşifsel ve eksik. Pazar trendlerini tahmin ettiğini, profesyonel araştırmayı ikame ettiğini veya üretim kalitesinde gerçek zamanlı istihbarat sunduğunu iddia etmiyor. Bu sistemlerin nasıl tasarlandığını ve nerede zayıf kaldığını öğrenmeye odaklanan bir öğrenci projesi.</p>
+
+          <h2>Problem</h2>
+          <p>YZ araştırması birçok kaynağa dağılmış; formatlar ve güncelleme döngüleri tutarsız. Araçları karşılaştırmak, model sürümlerini takip etmek veya önceki okumalara bağlamla dönmek istediğinizde yer imleri, notlar ve rastgele aramalar yeterli olmuyor. Genel LLM sohbeti akıcı yanıtlar verebilir ancak çoğu zaman kendi topladığınız materyale dayanmaz; bu da doğrulamayı zorlaştırır.</p>
+
+          <h2>Hedefler</h2>
+          <ul>
+            <li>YZ odaklı makale, dokümantasyon ve sürüm notları için tekrarlanabilir bir alma hattı kurmak</li>
+            <li>Konu, tarih, kaynak türü ve araç kategorisine göre filtrelemeyi destekleyen metadata şeması tasarlamak</li>
+            <li>Alınan içerik üzerinde anlamsal retrieval için parçalama ve vektör indeksleme uygulamak</li>
+            <li>İlgili parçaları aldıktan sonra Gemini API'yi çağıran bir RAG sohbet akışı bağlamak</li>
+            <li>Retrieval kalitesi sorunlarını belgelemek ve temel değerlendirme yaklaşımları denemek</li>
+            <li>Kapsamı dürüst tutmak: öğrenme projesi, dağıtılmış üretim hizmeti değil</li>
+          </ul>
+
+          <h2>Sistem / iş akışı</h2>
+          <div class="workflow">Kaynak girişi (URL, not, doküman)
+  → İçerik çekme ve ayrıştırma (Python betikleri)
+  → Metin temizleme ve metadata çıkarma (başlık, tarih, etiket, kaynak URL)
+  → Örtüşmeli parçalama stratejisi
+  → Embedding üretimi ve vektör indeksine kayıt
+  → Kullanıcı sorgusu
+  → Sorgu embedding → en iyi k parçayı getir
+  → Alınan bağlamla prompt oluştur
+  → Gemini API üretimi
+  → Yanıt (mümkünse kaynak referanslarıyla)</div>
+
+          <h2>Teknik odak</h2>
+          <ul>
+            <li>Python tabanlı alma betikleri ve metin ön işleme</li>
+            <li>Metadata organizasyonu ve kaynak kökeni takibi</li>
+            <li>Belge parçalama stratejileri ve örtüşme ayarı</li>
+            <li>Vektör retrieval kavramları (embedding modelleri, benzerlik araması)</li>
+            <li>Dayanaklı üretim için Gemini API entegrasyonu</li>
+            <li>Temel retrieval değerlendirmesi (manuel kontrol, alaka notları)</li>
+          </ul>
+
+          <h2>Geliştirdiklerim</h2>
+          <ul>
+            <li>Seçili YZ haber ve dokümantasyon kaynaklarından içerik alan ve normalleştiren betikler</li>
+            <li>Modelleri, araçları ve trend kategorilerini etiketlemek için hafif bir metadata katmanı</li>
+            <li>Anlamsal arama için vektör depolama ile parça indeksleme iş akışı</li>
+            <li>Alınan bağlamı Gemini'ye ileten prototip RAG sohbet arayüzü</li>
+            <li>Retrieval kalitesi, parça boyutu ve prompt yapısı üzerine notlar ve deneyler</li>
+            <li>Mimari kararları ve bilinen boşlukları açıklayan proje dokümantasyonu</li>
+          </ul>
+
+          <h2>Güncel durum</h2>
+          <p>Proje devam ediyor ve erken prototipleme aşamasında. Temel alma ve organizasyon fikirleri oturdu; retrieval ve sohbet bileşenlerini aşamalı olarak birbirine bağlıyorum. Herkese açık dağıtım, kullanıcı tabanı veya SLA yok. Çıktı kalitesi kaynak güncelliği, parçalama seçimleri ve retrieval doğruluğuna göre değişiyor. Her yanıtı hâlâ orijinal kaynaklara karşı manuel doğrulama gerektiren bir çıktı olarak ele alıyorum.</p>
+
+          <h2>Sınırlamalar ve risk farkındalığı</h2>
+          <p>Kaynak güncelliği önemli bir kısıt: alınan içerik hızla eskiyebilir ve hat henüz tüm kaynaklar için zamanında yeniden çekmeyi otomatikleştirmiyor. LLM yanıtları, özellikle parçalar eksik veya belirsiz olduğunda halüsinasyon üretebilir veya alınan bağlamı yanlış yorumlayabilir. Retrieval değerlendirmesi hâlâ gayri resmi — henüz titiz kıyas metriklerim yok. Bu proje pazar hareketlerini, yatırım sonuçlarını veya rekabet konumunu tahmin etmiyor. Araştırma ve öğrenme aracıdır; finansal veya stratejik tavsiye değildir.</p>
+
+          <h2>Sonraki adımlar</h2>
+          <ul>
+            <li>Alma güvenilirliğini artırmak ve net kaynak zaman damgaları eklemek</li>
+            <li>Daha iyi retrieval için parça boyutu, örtüşme ve metadata filtreleri denemek</li>
+            <li>Küçük bir test sorgu seti tanımlayıp retrieval isabet oranını manuel takip etmek</li>
+            <li>Sohbet yanıtlarında daha net atıf biçimlendirmesi eklemek</li>
+            <li>Öncelikli kaynaklar için zamanlanmış yeniden alma keşfetmek</li>
+            <li>Öğrenme için hata durumlarını (kaçan retrieval, bayat veri, halüsinasyon) belgelemek</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Projelere dön</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profili</a>
+          </div>
+        </article>
+      </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p class="footer-copy">Abdülaziz Öner © <span id="year"></span> — <span data-i18n-stable data-en="Built for open learning." data-tr="Herkese açık öğrenme için inşa edildi.">Built for open learning.</span></p>
+    </div>
+  </footer>
+  <script src="../assets/site.js"></script>
+</body>
+</html>
