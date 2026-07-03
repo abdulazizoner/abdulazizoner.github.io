@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ThemeLanguageControls from '@/components/ThemeLanguageControls.astro';
+import I18n from '@/components/I18n.astro';
+import { SITE } from '@/data/site';
+
+import { pagePath } from '@/utils/base';
+
+const home = pagePath();
+---
+
+<BaseLayout
+  title="404 — Abdülaziz Öner"
+  description="Page not found."
+  path="404.html"
+  pageId="error404"
+  noindex={true}
+  showSkip={true}
+>
+  <header class="nav" role="banner">
+    <div class="container">
+      <div class="nav-inner">
+        <a class="nav-brand" href={home} aria-label="Home">{SITE.brand}</a>
+        <div class="nav-actions">
+          <ThemeLanguageControls />
+        </div>
+      </div>
+    </div>
+  </header>
+  <main id="main">
+    <div class="container error-page">
+      <div>
+        <h1>404</h1>
+        <p>
+          <I18n
+            en="Page not found. The resource you requested does not exist on this site."
+            tr="Sayfa bulunamadı. İstediğiniz kaynak bu sitede mevcut değil."
+          />
+        </p>
+        <a class="btn btn-primary" href={home}>
+          <I18n en="Return home" tr="Ana sayfaya dön" />
+        </a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

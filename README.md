@@ -1,72 +1,109 @@
 # Abdülaziz Öner — Portfolio
 
-Personal portfolio for **AI & Data Engineering** student work. The public site is a **static GitHub Pages** deployment under `/docs`. The Django backend in this repository is kept for local development experiments and is **not** required to view the published site.
+Professional portfolio for **Abdülaziz Öner**, an AI & Data Engineering student. The site is a static, bilingual (EN/TR) showcase of projects, skills, and detailed case studies — built for GitHub Pages with no backend runtime.
 
-**Live site (after GitHub Pages is enabled):** [https://abdulazizoner.github.io/Aonware.ai/](https://abdulazizoner.github.io/Aonware.ai/)
+**Live site:** [https://abdulazizoner.github.io/Aonware.ai/](https://abdulazizoner.github.io/Aonware.ai/)
 
-## Repository layout
+## Tech stack
 
-| Path | Purpose |
-|------|---------|
-| `docs/` | **Published static portfolio** (GitHub Pages source) |
-| `docs/index.html` | Main portfolio page |
-| `docs/404.html` | Custom 404 page |
-| `docs/assets/` | CSS and JavaScript (no build step) |
-| `aonware_ai/`, `core/`, `portfolio/`, `blog/` | Django backend (optional, local dev only) |
+| Layer | Choice |
+|-------|--------|
+| Site generator | [Astro](https://astro.build/) (static output) |
+| Styling | Plain CSS (`src/styles/global.css`) |
+| i18n / theme | Client-side JS (`public/assets/site.js`) + `localStorage` |
+| Hosting | GitHub Pages from `/docs` |
+| Language | TypeScript for data files and components |
+
+### Why Astro (and not Django)
+
+This repository was originally a Web Programming course Django project. The portfolio is now an **independent static site**: no database, API, Redis, or server runtime is needed. Astro provides component reuse, typed content data, and a clean build pipeline while outputting plain HTML/CSS/JS that GitHub Pages can serve directly.
+
+Django and related backend files have been removed.
+
+## Local development
+
+```bash
+npm install
+npm run dev
+```
+
+Dev server: `http://localhost:4321/Aonware.ai/`
+
+## Build & preview
+
+```bash
+npm run build    # outputs to ./docs
+npm run preview  # serves built site locally
+```
+
+After every production build, `docs/.nojekyll` is written automatically so GitHub Pages serves `_astro/` assets correctly.
 
 ## GitHub Pages deployment
 
-1. Push this repository to GitHub (`abdulazizoner/Aonware.ai`).
-2. Open **Settings → Pages** in the repository.
-3. Under **Build and deployment → Source**, select:
-   - **Branch:** `main`
-   - **Folder:** `/docs`
-4. Save. GitHub will publish the site within a few minutes.
-5. Confirm the site loads at: `https://abdulazizoner.github.io/Aonware.ai/`
+1. Build: `npm run build`
+2. Commit the generated `docs/` folder
+3. Repository **Settings → Pages → Build and deployment → Source:** Deploy from branch `main` (or your default branch), folder **`/docs`**
 
-`docs/.nojekyll` is included so GitHub Pages serves files as-is (no Jekyll processing).
+`astro.config.mjs` sets:
 
-## Local preview (static site)
+- `site: 'https://abdulazizoner.github.io'`
+- `base: '/Aonware.ai'`
+- `outDir: './docs'`
 
-From the repository root:
+## Repository structure
 
-```bash
-cd docs
-python -m http.server 8000
+```
+.
+├── src/
+│   ├── components/     # Header, Footer, ProjectCard, Seo, etc.
+│   ├── layouts/        # BaseLayout.astro
+│   ├── data/           # site.ts, projects.ts, case-study-html.ts
+│   ├── case-studies/   # EN/TR HTML fragments for case study bodies
+│   ├── pages/          # index, 404, projects/[slug]
+│   ├── styles/         # global.css
+│   └── utils/          # base path helpers
+├── public/assets/      # site.js, favicon.svg, og-image.svg
+├── docs/               # Generated static output (do not edit by hand)
+├── scripts/postbuild.mjs
+├── astro.config.mjs
+└── package.json
 ```
 
-Open [http://localhost:8000](http://localhost:8000) and verify:
+## Editing content
 
-- Home page, CSS, and JS load
-- Navigation anchor links work
-- Theme toggle works
-- No console errors (no API calls)
+### Site copy (hero, about, skills, education)
 
-## Local Django backend (optional)
+Edit `src/data/site.ts`.
 
-The backend is **not** used by the GitHub Pages site. To run it locally for API/admin experiments:
+### Project cards (home page)
 
-```bash
-cp .env.template .env   # fill in values
-poetry install
-docker compose up -d    # PostgreSQL + Redis
-poetry run python manage.py migrate
-poetry run python manage.py runserver
-```
+Edit `src/data/projects.ts` — titles, tags, status, SEO metadata, and card summaries.
 
-## What gets published
+### Case study pages
 
-Only files under `docs/` are served on GitHub Pages. The following are **not** deployed:
+1. Update EN/TR HTML fragments in `src/case-studies/{slug}-en.html` and `{slug}-tr.html`
+2. Register the slug in `src/data/case-study-html.ts` and `src/data/projects.ts`
+3. Rebuild
 
-- `.env`, database files, `staticfiles/`, `__pycache__/`
-- Django templates and API endpoints
+### Adding a new case study
 
-## Contact
+1. Add a `Project` entry in `src/data/projects.ts` (unique `slug`, `pageId`, SEO fields)
+2. Create `src/case-studies/{slug}-en.html` and `{slug}-tr.html`
+3. Import both in `src/data/case-study-html.ts`
+4. Run `npm run build` — `src/pages/projects/[slug].astro` generates the page automatically
 
-- **Email:** abdulazizoner@gmail.com
-- **GitHub:** [github.com/abdulazizoner](https://github.com/abdulazizoner)
-- **LinkedIn:** [linkedin.com/in/abdülaziz-öner](https://www.linkedin.com/in/abdülaziz-öner/)
+## Adding a CV later
+
+Place a PDF at `public/assets/cv.pdf`, rebuild, then add a hero CTA in `src/pages/index.astro`. The Download CV button is intentionally omitted until a real file exists.
+
+## Features
+
+- EN/TR language toggle with `localStorage` persistence
+- Dark / light theme toggle
+- Detailed case studies: TrendAI, Turkish Legal-Risk NLP, FıratAsistan
+- Responsive layout (320px+), accessible controls, skip link
+- No API calls, no overclaimed metrics
 
 ## License
 
-Portfolio content © Abdülaziz Öner. Backend code follows the repository license where applicable.
+Personal portfolio — all rights reserved unless otherwise noted.

@@ -1,0 +1,33 @@
+---
+interface Props {
+  en: string;
+  tr: string;
+  tag?: keyof HTMLElementTagNameMap;
+  html?: boolean;
+  stable?: boolean;
+  inlineStable?: boolean;
+  class?: string;
+}
+
+const {
+  en,
+  tr,
+  tag: Tag = 'span',
+  html = false,
+  stable = false,
+  inlineStable = false,
+  class: className,
+} = Astro.props;
+
+const attrs: Record<string, unknown> = {
+  class: className,
+  'data-en': en,
+  'data-tr': tr,
+};
+
+if (html) attrs['data-i18n-html'] = true;
+if (stable) attrs['data-i18n-stable'] = true;
+if (inlineStable) attrs['data-i18n-stable-inline'] = true;
+---
+
+{html ? <Tag {...attrs} set:html={en} /> : <Tag {...attrs}>{en}</Tag>}

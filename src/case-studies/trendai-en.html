@@ -1,0 +1,78 @@
+<header class="case-study-header">
+          <span class="status status-ongoing">Ongoing</span>
+          <h1>TrendAI</h1>
+          <p class="case-study-lead">A personal AI trend intelligence workspace for collecting, organizing, and querying information about AI models, tools, and industry developments through retrieval-augmented research workflows.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Overview</h2>
+          <p>TrendAI started as a learning project to understand how data ingestion, metadata design, and retrieval-augmented generation (RAG) can work together in a practical research tool. The AI landscape changes quickly — new models, frameworks, and product announcements appear across blogs, papers, GitHub, and social feeds. I wanted a structured way to capture what I read and ask questions against that material instead of relying on memory or generic chatbot answers.</p>
+          <p>The project is intentionally scoped as a personal workspace, not a commercial product. I am building it to practice end-to-end skills: collecting sources, normalizing content, attaching metadata, indexing for retrieval, and connecting a chat interface that grounds responses in ingested documents. Gemini API is the primary generation backend I am exploring for query handling and summarization.</p>
+          <p>At this stage, TrendAI is exploratory and incomplete. It does not claim to predict market trends, replace professional research, or provide real-time intelligence at production quality. It is a student project focused on learning how these systems are designed and where they break down.</p>
+
+          <h2>Problem</h2>
+          <p>AI research is fragmented across many sources with inconsistent formats and update cycles. Bookmarks, notes, and ad-hoc searches do not scale when you want to compare tools, track model releases, or revisit earlier readings with context. Generic LLM chat can answer fluently but often lacks grounding in your own collected material, which makes verification harder.</p>
+
+          <h2>Goals</h2>
+          <ul>
+            <li>Build a repeatable ingestion pipeline for AI-related articles, documentation, and release notes</li>
+            <li>Design a metadata schema that supports filtering by topic, date, source type, and tool category</li>
+            <li>Implement chunking and vector indexing for semantic retrieval over ingested content</li>
+            <li>Connect a RAG chat flow that retrieves relevant chunks before calling the Gemini API</li>
+            <li>Document retrieval quality issues and experiment with basic evaluation approaches</li>
+            <li>Keep the scope honest: learning project, not a deployed production service</li>
+          </ul>
+
+          <h2>System / workflow</h2>
+          <div class="workflow">Source input (URLs, notes, docs)
+  → Fetch &amp; parse content (Python scripts)
+  → Clean text &amp; extract metadata (title, date, tags, source URL)
+  → Chunk documents with overlap strategy
+  → Generate embeddings &amp; store in vector index
+  → User query
+  → Embed query → retrieve top-k chunks
+  → Build prompt with retrieved context
+  → Gemini API generation
+  → Response with source references (when available)</div>
+
+          <h2>Technical focus</h2>
+          <ul>
+            <li>Python-based ingestion scripts and text preprocessing</li>
+            <li>Metadata organization and source provenance tracking</li>
+            <li>Document chunking strategies and overlap tuning</li>
+            <li>Vector retrieval concepts (embedding models, similarity search)</li>
+            <li>Gemini API integration for grounded generation</li>
+            <li>Basic retrieval evaluation (manual spot-checks, relevance notes)</li>
+          </ul>
+
+          <h2>What I am building</h2>
+          <ul>
+            <li>Scripts to ingest and normalize content from selected AI news and documentation sources</li>
+            <li>A lightweight metadata layer for tagging models, tools, and trend categories</li>
+            <li>Chunk indexing workflow with vector storage for semantic search</li>
+            <li>A prototype RAG chat interface that passes retrieved context to Gemini</li>
+            <li>Notes and experiments on retrieval quality, chunk size, and prompt structure</li>
+            <li>Project documentation describing architecture decisions and known gaps</li>
+          </ul>
+
+          <h2>Current state</h2>
+          <p>The project is ongoing and at an early prototyping stage. Core ingestion and organization ideas are in place, and I am iteratively connecting retrieval and chat components. There is no public deployment, no user base, and no SLA or unsupported operational metrics. Output quality varies depending on source freshness, chunking choices, and retrieval accuracy. I treat every answer as something that still needs manual verification against original sources.</p>
+
+          <h2>Limitations and risk awareness</h2>
+          <p>Source freshness is a major constraint: ingested content can become outdated quickly, and the pipeline does not yet automate timely re-fetching for all sources. LLM responses can hallucinate or misinterpret retrieved context, especially when chunks are incomplete or ambiguous. Retrieval evaluation is still informal — I do not have rigorous benchmark metrics yet. This project does not predict market movements, investment outcomes, or competitive positioning. It is a research and learning tool, not financial or strategic advice.</p>
+
+          <h2>Next steps</h2>
+          <ul>
+            <li>Improve ingestion reliability and add clearer source timestamps</li>
+            <li>Experiment with chunk size, overlap, and metadata filters for better retrieval</li>
+            <li>Define a small set of test queries and track retrieval hit rate manually</li>
+            <li>Add clearer citation formatting in chat responses</li>
+            <li>Explore scheduled re-ingestion for high-priority sources</li>
+            <li>Document failure cases (missed retrieval, stale data, hallucination) for learning</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Back to projects</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+          </div>
+        </article>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CaseStudyNav from '@/components/CaseStudyNav.astro';
+import Footer from '@/components/Footer.astro';
+import CaseStudyContent from '@/components/CaseStudyContent.astro';
+import { projects } from '@/data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const seo = project.seo.en;
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  path={`projects/${project.slug}.html`}
+  pageId={project.pageId}
+>
+  <CaseStudyNav />
+  <main id="main" class="case-study">
+    <div class="container">
+      <CaseStudyContent slug={project.slug} />
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

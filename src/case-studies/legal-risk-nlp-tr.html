@@ -1,0 +1,77 @@
+<header class="case-study-header">
+          <span class="status status-prototype">Prototip</span>
+          <h1>Türkçe Hukuki Risk Metin Sınıflandırması</h1>
+          <p class="case-study-lead">Kamusal Türkçe sosyal medya metinlerini analiz etmek için karar destek prototipi — NLP ön işleme ve sinyal vurgulama ile insan incelemecilere yardımcı olmak üzere tasarlandı; hukuki uygulamayı otomatikleştirmek veya hukuki tavsiye vermek için değil.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Genel bakış</h2>
+          <p>Bu proje, kamusal Türkçe sosyal medya içeriğinde potansiyel hukuki risk sinyalleri için inceleme yapılırken NLP tekniklerinin insan yargısını destekleyebileceğini — ikame edemeyeceğini — keşfediyor. Motivasyon eğitimsel ve teknik: hassas bir alanda ön işleme, sınıflandırma ve anahtar kelime eşleştirmesini anlamak; doğruluk hatalarının gerçek sonuçları olabileceği bir bağlamda.</p>
+          <p>Prototip açıkça insan-döngülü karar destek çerçevesinde konumlandırıldı. İçeriği yetkililere bildirmiyor, bağlayıcı hukuki karar vermiyor ve hukuki tavsiye sunmuyor. İşaretlenen her çıktı, bir kişinin incelemesi, bağlama oturtması ve karar vermesi içindir. KVKK ve GDPR ilkeleri, veri kapsamı, minimizasyon ve amaç sınırlaması hakkında düşünme biçimime rehberlik ediyor — öğrenci prototipi olsa bile.</p>
+          <p>Yüksek riskli bir bağlamda sorumlu NLP tasarımını öğrenmek için geliştiriyorum. Sistem dağıtılmadı, canlı moderasyon hatlarına bağlı değil ve hukuki doğruluk için validate edilmedi. Hat tasarımını ve etik kısıtları incelemek için deneysel bir araç.</p>
+
+          <h2>Problem</h2>
+          <p>Kamusal Türkçe sosyal medya metinleri hukuki risk sinyalleri açısından dikkatli incelenmeyi gerektirebilir; ancak tam otomatik sınıflandırma risklidir. Modeller ironi, alıntılanan konuşma veya belirsiz ifadelerde yanlış pozitif üretebilir. İnsan okuyucunun yakalayacağı bağlamı kaçırabilir. Uygulama kararlarını otomatikleştirmek gizlilik, usul hakkı ve aşırı müdahale endişelerini artırır. Daha sorumlu bir başlangıç noktası, incelemecinin metni önceliklendirmesine ve anlamasına yardımcı olan — insanın her zaman döngüde olduğu — araçlardır.</p>
+
+          <h2>Hedefler</h2>
+          <ul>
+            <li>Sosyal medya tarzı girdi için uygun Türkçe metin ön işleme hattı kurmak</li>
+            <li>Hukuki risk sinyallerini inceleme ipuçları olarak yüzeye çıkaran sınıflandırma yaklaşımları denemek</li>
+            <li>Model çıktılarını tamamlamak için anahtar kelime ve hukuki kavram eşleştirmesi uygulamak</li>
+            <li>Sinyalleri net sunan, kesinlik iddiası taşımayan incelemeci odaklı çıktı tasarlamak</li>
+            <li>İnsan incelemesini zorunlu tutmak — otomatik bildirim veya yetkili entegrasyonu yok</li>
+            <li>Etik kısıtları, KVKK/GDPR farkındalığını ve bilinen hata modlarını belgelemek</li>
+          </ul>
+
+          <h2>Sistem / iş akışı</h2>
+          <div class="workflow">Kamusal metin girişi (örnek / test veri seti)
+  → Türkçe normalizasyon (küçük harf, noktalama, token temizliği)
+  → Ön işleme ve özellik çıkarma
+  → Sınıflandırma modeli / kural katmanı (risk sinyali skorları)
+  → Anahtar kelime ve hukuki kavram desen eşleştirmesi
+  → Birleştirilmiş inceleme çıktısı (bayraklar, skorlar, eşleşen terimler)
+  → İnsan incelemeci orijinal metin + sistem ipuçlarını okur
+  → İnsan nihai kararı verir (kabul / red / manuel yükseltme)
+  → Otomatik yetkili bildirimi yok</div>
+
+          <h2>Teknik odak</h2>
+          <ul>
+            <li>Türkçe metin için Python NLP ön işleme</li>
+            <li>Metin sınıflandırma deneyleri (temel modeller, özellik tabanlı yaklaşımlar)</li>
+            <li>Kural tabanlı ve model destekli anahtar kelime/kavram eşleştirmesi</li>
+            <li>Duygu analizi tamamlayıcı sinyal olarak — tek başına karar faktörü değil</li>
+            <li>İncelemeci odaklı sonuçlar için yapılandırılmış çıktı biçimi</li>
+            <li>Yanlış pozitif desenlerinin ve değerlendirme sınırlarının dokümantasyonu</li>
+          </ul>
+
+          <h2>Geliştirdiklerim</h2>
+          <ul>
+            <li>Kısa formlu sosyal içerik için Türkçe metin normalizasyon ve temizleme yardımcıları</li>
+            <li>Güven uyarılarıyla risk sinyali skorları üreten sınıflandırma hattı</li>
+            <li>Manuel incelemeye değer terimleri vurgulayan anahtar kelime ve hukuki kavram eşleştiricisi</li>
+            <li>İnsan değerlendirmesi için prototip inceleme arayüzü veya yapılandırılmış JSON/metin çıktısı</li>
+            <li>Ön işleme seçimlerini ve sınıflandırma deneylerini belgeleyen test not defterleri</li>
+            <li>Etik ve sınırlamalar dokümantasyonu (hukuki tavsiye yok, yetkili iddiası yok)</li>
+          </ul>
+
+          <h2>Güncel durum</h2>
+          <p>Proje aktif geliştirme altındaki bir prototip. Resmi, ticari veya uygulama bağlamında dağıtılmadı. Gerçek dünya kullanımı, doğrulanmış hukuki doğruluk veya yetkili/platform entegrasyonu iddiası yok. Tüm çıktılar kontrollü örnek veri üzerinde deneysel ve eğitim amaçlı inceleme içindir. Bunu bitmiş bir moderasyon ürünü olarak sunmuyorum.</p>
+
+          <h2>Sınırlamalar ve risk farkındalığı</h2>
+          <p>Yanlış pozitifler beklenir: ironi, şakalar, alıntılar ve siyasi retorik, insanın reddedeceği sinyalleri tetikleyebilir. Hukuki belirsizlik kaçınılmazdır — NLP modelleri hukuku yorumlamaz ve tam durumsal bağlamı hesaba katamaz. Prototip lehçe varyasyonu, kod değiştirme veya multimedya bağlamını (görseller, diziler) sağlam biçimde ele almıyor. Bu hukuki tavsiye değil, uyumluluk aracı değil ve otomatik uygulama için uygun değil. Öğrenmenin ötesinde kullanım hukuki inceleme, alan uzmanı doğrulaması ve resmi yönetişim gerektirir — bunların hiçbiri bu öğrenci projesinde yok.</p>
+
+          <h2>Sonraki adımlar</h2>
+          <ul>
+            <li>Gayri resmi yazım ve sosyal kısaltmalar için Türkçe ön işlemeyi genişletmek</li>
+            <li>Küçük etiketli bir değerlendirme seti oluşturup bilinen örneklerde precision/recall takibi</li>
+            <li>Yanlış pozitif vakaları (ironi, alıntılar) belgeleyip kuralları mümkün olduğunca ayarlamak</li>
+            <li>İncelemeci çıktı düzenini sinyalleri orijinal metinden net ayıracak şekilde iyileştirmek</li>
+            <li>KVKK/GDPR veri kapsamı varsayımlarını kapsayan daha net etik bölüm yazmak</li>
+            <li>Daha geniş test öncesinde insan-döngülü değerlendirme protokolü keşfetmek</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Projelere dön</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profili</a>
+          </div>
+        </article>

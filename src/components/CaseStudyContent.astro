@@ -1,0 +1,22 @@
+---
+import { caseStudyHtml, fixCaseStudyLinks } from '@/data/case-study-html';
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const content = caseStudyHtml[slug];
+
+if (!content) {
+  throw new Error(`Missing case study content for slug: ${slug}`);
+}
+
+const enHtml = fixCaseStudyLinks(content.en);
+const trHtml = fixCaseStudyLinks(content.tr);
+---
+
+<div class="case-study-i18n" data-i18n-stable>
+  <div data-lang-block="en" set:html={enHtml} />
+  <div data-lang-block="tr" class="hidden" set:html={trHtml} />
+</div>

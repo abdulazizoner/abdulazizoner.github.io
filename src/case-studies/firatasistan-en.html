@@ -1,0 +1,79 @@
+<header class="case-study-header">
+          <span class="status status-ongoing">Ongoing</span>
+          <h1>FıratAsistan</h1>
+          <p class="case-study-lead">A university-focused AI assistant concept that helps students explore answers from educational and institutional documents through retrieval-augmented generation, vector search, and source-grounded chat design.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Overview</h2>
+          <p>FıratAsistan is an ongoing personal project exploring how a RAG-based assistant could help students find information in scattered educational documents — syllabi, regulations, guides, and departmental notices. I am a student at Fırat University studying AI &amp; Data Engineering, and this project grew from a practical question: how can retrieval workflows make document-heavy university information easier to query without relying on generic chatbot answers?</p>
+          <p>The concept centers on document ingestion, Turkish content handling, vector indexing with Chroma-like storage, and answer generation that references retrieved source sections. I am learning how to design the pipeline end to end: from PDF/text ingestion through chunking, embedding, retrieval, and a simple chat frontend connected to a backend API.</p>
+          <p>This is not an official Fırat University product. It has not been deployed by the university, has no institutional approval, and has no real users at scale. I present it honestly as a student learning project that explores production-readiness challenges — accuracy, privacy, and reliability — without overclaiming deployment or adoption.</p>
+
+          <h2>Problem</h2>
+          <p>Students often need information spread across many documents with different formats, update cycles, and writing styles. Searching manually is slow, and generic LLM chatbots can hallucinate answers or ignore the specific institutional context students need. A useful assistant should retrieve relevant document sections first and ground responses in that material, so users can verify answers against original sources.</p>
+
+          <h2>Goals</h2>
+          <ul>
+            <li>Build a document ingestion pipeline for educational and institutional text (PDF, plain text)</li>
+            <li>Handle Turkish content in preprocessing, chunking, and retrieval workflows</li>
+            <li>Implement vector indexing and semantic search using Chroma-like storage concepts</li>
+            <li>Design a RAG flow that passes retrieved chunks to an LLM with citation-style references</li>
+            <li>Connect a simple backend API to a chat frontend for interactive querying</li>
+            <li>Think through KVKK-aware data scope, permissions, and responsible deployment constraints</li>
+          </ul>
+
+          <h2>System / workflow</h2>
+          <div class="workflow">Document upload (PDF / text files)
+  → Text extraction &amp; Turkish preprocessing
+  → Chunking with metadata (doc name, section, page)
+  → Embedding generation
+  → Store in Chroma-like vector database
+  → Student query via chat frontend
+  → Backend API receives query
+  → Embed query → retrieve top-k relevant chunks
+  → Build grounded prompt with source context
+  → LLM generates answer with references
+  → Display response + source citations to user</div>
+
+          <h2>Technical focus</h2>
+          <ul>
+            <li>RAG / retrieval-augmented generation architecture</li>
+            <li>Document ingestion, text extraction, and chunking strategies</li>
+            <li>Vector indexing and semantic retrieval (Chroma-like storage)</li>
+            <li>Turkish content handling in preprocessing and embedding quality</li>
+            <li>Backend API design connecting retrieval service to chat frontend</li>
+            <li>Testing, observability, and deployment planning as improvement areas</li>
+          </ul>
+
+          <h2>What I am building</h2>
+          <ul>
+            <li>Python ingestion scripts for PDF and text document processing</li>
+            <li>Chunking pipeline with metadata tags for document source tracking</li>
+            <li>Vector store setup and embedding workflow for semantic search</li>
+            <li>Backend retrieval API that returns ranked chunks for a given query</li>
+            <li>Prototype chat interface for querying ingested documents</li>
+            <li>Documentation on architecture, known gaps, and privacy considerations</li>
+          </ul>
+
+          <h2>Current state</h2>
+          <p>The project is in active development as a personal learning effort adjacent to my university studies. Core ingestion and retrieval components are being built incrementally. There is no official deployment by Fırat University, no confirmed institutional endorsement, and no claim of real users or production traffic. Answer accuracy is not guaranteed — responses can be incomplete, outdated, or incorrect when retrieval misses relevant chunks or the LLM misinterprets context. Users should always verify against original documents.</p>
+
+          <h2>Limitations and risk awareness</h2>
+          <p>Document coverage is limited to what has been manually ingested — the assistant cannot answer questions about material not in the index. Turkish NLP quality depends on preprocessing choices and embedding model behavior, which I am still evaluating. Hallucination remains a risk even with RAG: the model may add details not present in retrieved chunks. There is no formal KVKK compliance review, no access control system for sensitive documents, and no unsupported operational metrics or support guarantees. This must not be treated as an authoritative university information source.</p>
+
+          <h2>Next steps</h2>
+          <ul>
+            <li>Improve PDF extraction quality and handle more document layout types</li>
+            <li>Tune chunk size and metadata for better retrieval on Turkish academic text</li>
+            <li>Add clearer citation formatting in chat responses</li>
+            <li>Build a small test query set and track retrieval relevance manually</li>
+            <li>Explore basic logging and error handling in the backend API</li>
+            <li>Document deployment options and privacy scope assumptions before any wider testing</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Back to projects</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+          </div>
+        </article>

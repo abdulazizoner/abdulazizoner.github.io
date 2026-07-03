@@ -1,0 +1,53 @@
+---
+import { SITE, navLinks } from '@/data/site';
+import ThemeLanguageControls from './ThemeLanguageControls.astro';
+import I18n from './I18n.astro';
+import { pagePath } from '@/utils/base';
+
+const home = pagePath();
+---
+
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a class="nav-brand" href={home} aria-label="Home">{SITE.brand}</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          {
+            navLinks.map((link) => (
+              <li>
+                <a href={`#${link.id}`}>
+                  <I18n en={link.en} tr={link.tr} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <ThemeLanguageControls />
+        <button
+          type="button"
+          id="nav-toggle"
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="nav-mobile"
+          data-aria-en="Open menu"
+          data-aria-tr="Menüyü aç"
+          aria-label="Open menu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav id="nav-mobile" class="nav-mobile" aria-label="Mobile">
+      {
+        navLinks.map((link) => (
+          <a href={`#${link.id}`}>
+            <I18n en={link.en} tr={link.tr} />
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>

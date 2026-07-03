@@ -1,0 +1,77 @@
+<header class="case-study-header">
+          <span class="status status-prototype">Prototype</span>
+          <h1>Turkish Legal-Risk Text Classification</h1>
+          <p class="case-study-lead">A decision-support prototype for analyzing public Turkish social media text — designed to assist human reviewers with NLP preprocessing and signal highlighting, not to automate legal enforcement or provide legal advice.</p>
+        </header>
+
+        <article class="case-study-body">
+          <h2>Overview</h2>
+          <p>This project explores how NLP techniques can support — not replace — human judgment when reviewing public Turkish social media content for potential legal-risk signals. The motivation is educational and technical: understanding preprocessing, classification, and keyword matching in a sensitive domain where accuracy errors have real consequences.</p>
+          <p>The prototype is explicitly framed as human-in-the-loop decision support. It does not report content to authorities, does not make binding legal determinations, and does not provide legal advice. Any flagged output is meant for a person to review, contextualize, and decide upon. KVKK (Turkey's personal data protection law) and GDPR principles inform how I think about data scope, minimization, and purpose limitation — even in a student prototype.</p>
+          <p>I am building this to learn responsible NLP design in a high-stakes context. The system is not deployed, not connected to live moderation pipelines, and not validated for legal accuracy. It is an experimental tool for studying pipeline design and ethical constraints.</p>
+
+          <h2>Problem</h2>
+          <p>Public Turkish social media text may contain language that warrants careful review for legal-risk signals, but fully automated classification is risky. Models can produce false positives on sarcasm, quoted speech, or ambiguous phrasing. They can miss context that a human reader would catch. Automating enforcement decisions raises ethical concerns around privacy, due process, and overreach. A more responsible starting point is tooling that helps a reviewer prioritize and understand text — with a human always in the loop.</p>
+
+          <h2>Goals</h2>
+          <ul>
+            <li>Build a Turkish text preprocessing pipeline suitable for social media-style input</li>
+            <li>Experiment with classification approaches that surface legal-risk signals as review hints</li>
+            <li>Implement keyword and legal-concept matching to complement model outputs</li>
+            <li>Design reviewer-facing output that presents signals clearly without claiming certainty</li>
+            <li>Keep human review mandatory — no automated reporting or authority integration</li>
+            <li>Document ethical constraints, KVKK/GDPR awareness, and known failure modes</li>
+          </ul>
+
+          <h2>System / workflow</h2>
+          <div class="workflow">Public text input (sample / test dataset)
+  → Turkish normalization (lowercasing, punctuation, token cleanup)
+  → Preprocessing &amp; feature extraction
+  → Classification model / rule layer (risk signal scores)
+  → Keyword &amp; legal-concept pattern matching
+  → Aggregated review output (flags, scores, matched terms)
+  → Human reviewer reads original text + system hints
+  → Human makes final judgment (accept / reject / escalate manually)
+  → No automated authority reporting</div>
+
+          <h2>Technical focus</h2>
+          <ul>
+            <li>Python NLP preprocessing for Turkish text</li>
+            <li>Text classification experiments (baseline models, feature-based approaches)</li>
+            <li>Rule-based and model-assisted keyword/concept matching</li>
+            <li>Sentiment analysis as a supplementary signal — not a sole decision factor</li>
+            <li>Structured output format for reviewer-facing results</li>
+            <li>Documentation of false positive patterns and evaluation limitations</li>
+          </ul>
+
+          <h2>What I am building</h2>
+          <ul>
+            <li>Turkish text normalization and cleaning utilities for short-form social content</li>
+            <li>Classification pipeline that outputs risk signal scores with confidence caveats</li>
+            <li>Keyword and legal-concept matcher to highlight terms worth manual inspection</li>
+            <li>Prototype review interface or structured JSON/text output for human evaluation</li>
+            <li>Test notebooks documenting preprocessing choices and classification experiments</li>
+            <li>Ethics and limitations documentation (no legal advice, no authority claims)</li>
+          </ul>
+
+          <h2>Current state</h2>
+          <p>The project is a prototype under active development. It has not been deployed in any official, commercial, or enforcement context. There are no claims of real-world usage, validated legal accuracy, or integration with authorities or platforms. All outputs are intended for experimental and educational review on controlled sample data. I do not present this as a finished moderation product.</p>
+
+          <h2>Limitations and risk awareness</h2>
+          <p>False positives are expected: sarcasm, jokes, quoted material, and political rhetoric can trigger signals that a human would dismiss. Legal ambiguity is inherent — NLP models do not interpret law and cannot account for full situational context. The prototype does not handle dialect variation, code-switching, or multimedia context (images, threads) robustly. This is not legal advice, not a compliance tool, and not suitable for automated enforcement. Any use beyond learning would require legal review, domain expert validation, and formal governance — none of which this student project provides.</p>
+
+          <h2>Next steps</h2>
+          <ul>
+            <li>Expand Turkish preprocessing handling for informal spelling and social abbreviations</li>
+            <li>Build a small labeled evaluation set and track precision/recall on known examples</li>
+            <li>Document false positive cases (sarcasm, quotes) and adjust rules where possible</li>
+            <li>Improve reviewer output layout to separate signals from original text clearly</li>
+            <li>Write a clearer ethics section covering KVKK/GDPR data scope assumptions</li>
+            <li>Explore human-in-the-loop evaluation protocol before any broader testing</li>
+          </ul>
+
+          <div class="case-study-links">
+            <a href="../index.html#projects">← Back to projects</a>
+            <a href="https://github.com/abdulazizoner" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+          </div>
+        </article>

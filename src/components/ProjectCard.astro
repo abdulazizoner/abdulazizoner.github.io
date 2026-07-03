@@ -1,0 +1,51 @@
+---
+import type { Project } from '@/data/projects';
+import { projectTitle } from '@/data/projects';
+import I18n from './I18n.astro';
+import { pagePath } from '@/utils/base';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const titleEn = projectTitle(project, 'en');
+const statusClass = `status status-${project.status}`;
+const statusEn = project.status === 'ongoing' ? 'Ongoing' : project.status === 'prototype' ? 'Prototype' : 'Completed';
+const statusTr = project.status === 'ongoing' ? 'Devam ediyor' : project.status === 'prototype' ? 'Prototip' : 'Tamamlandı';
+---
+
+<article class="project-card">
+  <div class="project-card-header">
+    <span class={statusClass}>
+      <I18n en={statusEn} tr={statusTr} />
+    </span>
+  </div>
+  <h3>
+    {
+      typeof project.title === 'string' ? (
+        project.title
+      ) : (
+        <I18n en={project.title.en} tr={project.title.tr} stable />
+      )
+    }
+  </h3>
+  <p class="problem">
+    <I18n en={project.problem.en} tr={project.problem.tr} stable />
+  </p>
+  <p class="focus">
+    <I18n en={project.focus.en} tr={project.focus.tr} stable html />
+  </p>
+  <div class="project-tags">
+    {
+      project.tags.map((tag) =>
+        typeof tag === 'string' ? <span>{tag}</span> : <span><I18n en={tag.en} tr={tag.tr} /></span>
+      )
+    }
+  </div>
+  <div class="project-links">
+    <a href={pagePath(`projects/${project.slug}.html`)} data-i18n-stable data-en="Read case study →" data-tr="Proje incelemesi →"
+      >Read case study →</a
+    >
+  </div>
+</article>

@@ -1,0 +1,26 @@
+---
+import I18n from './I18n.astro';
+
+interface Props {
+  icon: string;
+  iconColor: string;
+  titleEn: string;
+  titleTr: string;
+  labelEn: string;
+  labelTr: string;
+  headingId: string;
+}
+
+const { icon, iconColor, titleEn, titleTr, labelEn, labelTr, headingId } = Astro.props;
+---
+
+<div class="section-header">
+  <span class="icon" style={`color:${iconColor}`}>{icon}</span>
+  <h2 id={headingId}>
+    <I18n en={titleEn} tr={titleTr} stable />
+  </h2>
+  <span class="line" aria-hidden="true"></span>
+  <span class="label">
+    <I18n en={labelEn} tr={labelTr} />
+  </span>
+</div>

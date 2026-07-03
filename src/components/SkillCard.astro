@@ -1,0 +1,24 @@
+---
+import type { SkillCard } from '@/data/site';
+import I18n from './I18n.astro';
+
+interface Props {
+  card: SkillCard;
+}
+
+const { card } = Astro.props;
+const variantClass = card.variant ? card.variant : '';
+---
+
+<article class={`skill-card ${variantClass}`.trim()}>
+  <h3>
+    <I18n en={card.title.en} tr={card.title.tr} />
+  </h3>
+  <div class="skill-tags">
+    {
+      card.items.map((item) =>
+        typeof item === 'string' ? <span>{item}</span> : <span><I18n en={item.en} tr={item.tr} /></span>
+      )
+    }
+  </div>
+</article>

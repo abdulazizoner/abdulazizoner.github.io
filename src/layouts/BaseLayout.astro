@@ -1,0 +1,44 @@
+---
+import Seo from '@/components/Seo.astro';
+import '@/styles/global.css';
+import { assetPath } from '@/utils/base';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  pageId?: string;
+  noindex?: boolean;
+  siteName?: boolean;
+  showSkip?: boolean;
+}
+
+const {
+  title,
+  description,
+  path = '',
+  pageId = 'home',
+  noindex = false,
+  siteName = false,
+  showSkip = true,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <Seo title={title} description={description} path={path} noindex={noindex} siteName={siteName} />
+  </head>
+  <body data-page={pageId}>
+    {
+      showSkip && (
+        <a class="skip-link" href="#main" data-en="Skip to content" data-tr="İçeriğe atla">
+          Skip to content
+        </a>
+      )
+    }
+    <div id="progress-bar" aria-hidden="true"></div>
+    <slot />
+    <script src={assetPath('assets/site.js')} is:inline></script>
+  </body>
+</html>

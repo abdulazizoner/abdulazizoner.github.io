@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  noindex?: boolean;
+  ogLocale?: string;
+  siteName?: boolean;
+}
+
+import { assetPath, pagePath } from '@/utils/base';
+
+const {
+  title,
+  description,
+  path = '',
+  noindex = false,
+  ogLocale = 'en_US',
+  siteName = false,
+} = Astro.props;
+
+const canonical = new URL(pagePath(path), Astro.site).href;
+const ogImage = new URL(assetPath('assets/og-image.svg'), Astro.site).href;
+const pageUrl = canonical;
+const favicon = assetPath('assets/favicon.svg');
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{noindex ? <meta name="robots" content="noindex" /> : null}
+<meta name="description" content={description} />
+<meta name="author" content="Abdülaziz Öner" />
+<link rel="canonical" href={canonical} />
+<link rel="icon" href={favicon} type="image/svg+xml" />
+<link rel="apple-touch-icon" href={favicon} />
+<meta name="theme-color" content="#0d1117" />
+{siteName ? <meta property="og:site_name" content="Abdülaziz Öner" /> : null}
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={pageUrl} />
+<meta property="og:image" content={ogImage} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<title>{title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>

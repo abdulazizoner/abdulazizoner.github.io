@@ -1,0 +1,13 @@
+---
+import { SITE, footerTagline } from '@/data/site';
+import I18n from './I18n.astro';
+---
+
+<footer class="footer" role="contentinfo">
+  <div class="container footer-inner">
+    <p class="footer-copy">
+      {SITE.name} © <span id="year"></span> —
+      <I18n en={footerTagline.en} tr={footerTagline.tr} stable />
+    </p>
+  </div>
+</footer>
