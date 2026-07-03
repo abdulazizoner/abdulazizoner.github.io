@@ -1,7 +1,7 @@
 export const SITE = {
   name: 'Abdülaziz Öner',
   brand: 'abdulaziz.oner',
-  url: 'https://abdulazizoner.github.io/Aonware.ai/',
+  url: 'https://abdulazizoner.github.io/',
   github: 'https://github.com/abdulazizoner',
   linkedin: 'https://www.linkedin.com/in/abdülaziz-öner/',
   email: 'mailto:abdulazizoner@gmail.com',

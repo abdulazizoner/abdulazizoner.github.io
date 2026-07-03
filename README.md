@@ -2,7 +2,7 @@
 
 Professional portfolio for **Abdülaziz Öner**, an AI & Data Engineering student. The site is a static, bilingual (EN/TR) showcase of projects, skills, and detailed case studies — built for GitHub Pages with no backend runtime.
 
-**Live site:** [https://abdulazizoner.github.io/Aonware.ai/](https://abdulazizoner.github.io/Aonware.ai/)
+**Live site:** [https://abdulazizoner.github.io/](https://abdulazizoner.github.io/)
 
 ## Tech stack
 
@@ -27,7 +27,7 @@ npm install
 npm run dev
 ```
 
-Dev server: `http://localhost:4321/Aonware.ai/`
+Dev server: `http://localhost:4321/`
 
 ## Build & preview
 
@@ -47,7 +47,6 @@ After every production build, `docs/.nojekyll` is written automatically so GitHu
 `astro.config.mjs` sets:
 
 - `site: 'https://abdulazizoner.github.io'`
-- `base: '/Aonware.ai'`
 - `outDir: './docs'`
 
 ## Repository structure
