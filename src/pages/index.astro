@@ -6,6 +6,7 @@ import SectionHeader from '@/components/SectionHeader.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import SkillCard from '@/components/SkillCard.astro';
 import I18n from '@/components/I18n.astro';
+import { assetPath } from '@/utils/base';
 import { SITE, hero, about, skills, education, focusItems } from '@/data/site';
 import { projects } from '@/data/projects';
 ---
@@ -63,6 +64,16 @@ import { projects } from '@/data/projects';
                 ></path></svg
               >
               <I18n en="Email" tr="E-posta" />
+            </a>
+            <a class="btn" href={assetPath('assets/cv.pdf')} download="Abdulaziz-Oner-CV.pdf" target="_blank" rel="noopener noreferrer">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3M5 20h14a2 2 0 002-2V7a2 2 0 00-2-2h-3.5L14 2H5a2 2 0 00-2 2v14a2 2 0 002 2z"
+                ></path></svg
+              >
+              <I18n en="Download CV" tr="CV'yi İndir" />
             </a>
           </div>
         </div>
