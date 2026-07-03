@@ -17,7 +17,11 @@ const variantClass = card.variant ? card.variant : '';
   <div class="skill-tags">
     {
       card.items.map((item) =>
-        typeof item === 'string' ? <span>{item}</span> : <span><I18n en={item.en} tr={item.tr} /></span>
+        typeof item === 'string' ? (
+          <span class="skill-pill">{item}</span>
+        ) : (
+          <I18n en={item.en} tr={item.tr} class="skill-pill" />
+        )
       )
     }
   </div>

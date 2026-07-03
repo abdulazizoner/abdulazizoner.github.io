@@ -105,11 +105,7 @@ import { projects } from '@/data/projects';
                 return <span class="tag">{tag.text}</span>;
               }
               const variant = tag.variant ? `tag-${tag.variant}` : '';
-              return (
-                <span class={`tag ${variant}`.trim()}>
-                  <I18n en={tag.en} tr={tag.tr} />
-                </span>
-              );
+              return <I18n en={tag.en} tr={tag.tr} class={`tag ${variant}`.trim()} />;
             })
           }
         </div>

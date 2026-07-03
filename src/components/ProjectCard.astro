@@ -9,7 +9,6 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const titleEn = projectTitle(project, 'en');
 const statusClass = `status status-${project.status}`;
 const statusEn = project.status === 'ongoing' ? 'Ongoing' : project.status === 'prototype' ? 'Prototype' : 'Completed';
 const statusTr = project.status === 'ongoing' ? 'Devam ediyor' : project.status === 'prototype' ? 'Prototip' : 'Tamamlandı';
@@ -17,9 +16,7 @@ const statusTr = project.status === 'ongoing' ? 'Devam ediyor' : project.status 
 
 <article class="project-card">
   <div class="project-card-header">
-    <span class={statusClass}>
-      <I18n en={statusEn} tr={statusTr} />
-    </span>
+    <I18n en={statusEn} tr={statusTr} class={statusClass} />
   </div>
   <h3>
     {
@@ -39,7 +36,11 @@ const statusTr = project.status === 'ongoing' ? 'Devam ediyor' : project.status 
   <div class="project-tags">
     {
       project.tags.map((tag) =>
-        typeof tag === 'string' ? <span>{tag}</span> : <span><I18n en={tag.en} tr={tag.tr} /></span>
+        typeof tag === 'string' ? (
+          <span class="project-pill">{tag}</span>
+        ) : (
+          <I18n en={tag.en} tr={tag.tr} class="project-pill" />
+        )
       )
     }
   </div>
