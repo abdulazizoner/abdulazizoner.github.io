@@ -623,6 +623,15 @@ html.light .focus-item {
   background: color-mix(in srgb, var(--indigo) 8%, transparent);
 }
 
+.tag-row > .tag > span {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  font: inherit;
+  color: inherit;
+}
+
 /* Skills grid */
 .skills-grid {
   display: grid;
@@ -665,7 +674,7 @@ html.light .focus-item {
   gap: 0.4rem;
 }
 
-.skill-tags span {
+.skill-tags > span {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.68rem;
   padding: 0.2rem 0.55rem;
@@ -675,22 +684,29 @@ html.light .focus-item {
   background: color-mix(in srgb, var(--blue) 7%, transparent);
 }
 
-.skill-card.emerald .skill-tags span {
+.skill-card.emerald .skill-tags > span {
   border-color: color-mix(in srgb, var(--emerald) 30%, transparent);
   color: var(--emerald);
   background: color-mix(in srgb, var(--emerald) 7%, transparent);
 }
 
-.skill-card.indigo .skill-tags span {
+.skill-card.indigo .skill-tags > span {
   border-color: color-mix(in srgb, var(--indigo) 30%, transparent);
   color: var(--indigo);
   background: color-mix(in srgb, var(--indigo) 7%, transparent);
 }
 
-.skill-card.amber .skill-tags span {
+.skill-card.amber .skill-tags > span {
   border-color: color-mix(in srgb, var(--amber) 35%, transparent);
   color: var(--amber);
   background: color-mix(in srgb, var(--amber) 8%, transparent);
+}
+
+.skill-tags > span > span {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
 }
 
 /* Projects */
@@ -809,7 +825,7 @@ html.light .focus-item {
   margin-bottom: 1rem;
 }
 
-.project-tags span {
+.project-tags > span {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.62rem;
   padding: 0.15rem 0.45rem;
@@ -817,6 +833,13 @@ html.light .focus-item {
   color: var(--indigo);
   border: 1px solid color-mix(in srgb, var(--indigo) 25%, transparent);
   background: color-mix(in srgb, var(--indigo) 6%, transparent);
+}
+
+.project-tags > span > span {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
 }
 
 .project-links {
