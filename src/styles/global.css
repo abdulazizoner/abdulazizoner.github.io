@@ -852,12 +852,10 @@ html.light .focus-item {
 }
 
 .back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+  display: inline-block;
   font-family: "JetBrains Mono", monospace;
   font-size: 0.75rem;
-  line-height: 1;
+  line-height: 1.4;
   color: var(--muted);
   text-decoration: none;
   transition: color 0.2s;
@@ -865,15 +863,6 @@ html.light .focus-item {
 
 .back-link:hover,
 .back-link:focus-visible { color: var(--blue); }
-
-.back-link svg {
-  display: block;
-  flex-shrink: 0;
-  width: 12px;
-  height: 12px;
-  /* Optical: flex midpoint tracks descenders (p/j); nudge to the cap-height band */
-  transform: translateY(-3px);
-}
 
 .case-study {
   padding: 2rem 0 4rem;
