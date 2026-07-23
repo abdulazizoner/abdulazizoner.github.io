@@ -73,7 +73,9 @@
     });
 
     document.querySelectorAll('[data-lang-block]').forEach((el) => {
-      el.hidden = el.getAttribute('data-lang-block') !== lang;
+      const hide = el.getAttribute('data-lang-block') !== lang;
+      el.hidden = hide;
+      el.classList.toggle('hidden', hide);
     });
 
     document.querySelectorAll('[data-lang-btn]').forEach((btn) => {
@@ -173,6 +175,7 @@
           blocks.forEach((block) => {
             saved.push({ block, hidden: block.hidden });
             block.hidden = false;
+            block.classList.remove('hidden');
             block.style.visibility = 'hidden';
             block.style.position = 'absolute';
             block.style.left = '0';
@@ -188,6 +191,7 @@
             block.style.right = '';
             block.style.top = '';
             block.hidden = hidden;
+            block.classList.toggle('hidden', hidden);
           });
 
           if (maxH > 0) el.style.minHeight = maxH + 'px';

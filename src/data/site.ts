@@ -4,7 +4,8 @@ export const SITE = {
   url: 'https://abdulazizoner.github.io/',
   github: 'https://github.com/abdulazizoner',
   linkedin: 'https://www.linkedin.com/in/abdülaziz-öner/',
-  email: 'mailto:abdulazizoner@gmail.com',
+  email:
+    'https://mail.google.com/mail/?view=cm&fs=1&to=abdulazizoner@gmail.com&su=Portfolio%20Contact%20-%20Abd%C3%BClaziz%20%C3%96ner',
 } as const;
 
 export const navLinks = [
