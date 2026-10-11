@@ -24,6 +24,6 @@ Language and theme preferences are stored locally in the browser. The site works
 
 Build and commit `docs/` alongside source changes. GitHub Pages serves `main`, `/docs`. `scripts/postbuild.mjs` creates `.nojekyll` so generated assets are served correctly.
 
-Project listings and case studies are intentionally not published. The CV download contains reviewed education and skills information, without private project details.
+Project listings and case studies are intentionally not published. CV files are kept locally and are not published on the site.
 
 Personal portfolio — all rights reserved unless otherwise noted.

@@ -12,8 +12,8 @@ export const navLinks = [
   { id: "about", en: "About", tr: "Hakkında" },
   {
     id: "skills",
-    en: "Skills & Interests",
-    tr: "Yetkinlikler ve İlgi Alanları",
+    en: "Skills",
+    tr: "Yetkinlikler",
   },
   { id: "education", en: "Education", tr: "Eğitim" },
 ] as const;
