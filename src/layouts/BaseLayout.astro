@@ -25,7 +25,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
   <head>
     <Seo title={title} description={description} path={path} noindex={noindex} siteName={siteName} />
   </head>
@@ -37,7 +37,7 @@ const {
         </a>
       )
     }
-    <div id="progress-bar" aria-hidden="true"></div>
+    <noscript><style>.lang-switch,.theme-btn,.nav-toggle{display:none}.nav-links{display:flex;flex-wrap:wrap}.nav-inner{flex-wrap:wrap}.nav{position:relative}</style></noscript>
     <slot />
     <script src={assetPath('assets/site.js')} is:inline></script>
   </body>

@@ -3,17 +3,15 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import SectionHeader from '@/components/SectionHeader.astro';
-import ProjectCard from '@/components/ProjectCard.astro';
 import SkillCard from '@/components/SkillCard.astro';
 import I18n from '@/components/I18n.astro';
 import { assetPath } from '@/utils/base';
 import { SITE, hero, about, skills, education, focusItems } from '@/data/site';
-import { projects } from '@/data/projects';
 ---
 
 <BaseLayout
   title="Abdülaziz Öner — AI & Data Engineering Student"
-  description="Abdülaziz Öner — AI & Data Engineering student building applied AI systems, NLP pipelines, RAG workflows, and analytics-driven products."
+  description="Abdülaziz Öner, AI & Data Engineering student at Fırat University. Python, SQL, data analysis and natural language processing."
   path=""
   pageId="home"
   siteName={true}
@@ -21,8 +19,7 @@ import { projects } from '@/data/projects';
   <Header />
   <main id="main">
     <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero-blob-indigo" aria-hidden="true"></div>
-      <div class="hero-blob-blue" aria-hidden="true"></div>
+
       <div class="container hero-grid">
         <div class="hero-content">
           <div class="hero-badge" data-i18n-stable-inline>
@@ -30,7 +27,7 @@ import { projects } from '@/data/projects';
             <span class="hero-badge-text" data-en={hero.badge.en} data-tr={hero.badge.tr}>{hero.badge.en}</span>
           </div>
           <h1 id="hero-heading">
-            <span class="dim">&lt; </span>Abdülaziz<br />Öner<span class="accent"> /&gt;</span>
+            Abdülaziz Öner
           </h1>
           <p class="hero-title">
             <I18n en={hero.title.en} tr={hero.title.tr} stable />
@@ -65,25 +62,20 @@ import { projects } from '@/data/projects';
               >
               <I18n en="Email" tr="E-posta" />
             </a>
-            <a class="btn" href={assetPath('assets/cv.pdf')} download="Abdulaziz-Oner-CV.pdf" target="_blank" rel="noopener noreferrer">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"
-                ><path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 10v6m0 0l-3-3m3 3l3-3M5 20h14a2 2 0 002-2V7a2 2 0 00-2-2h-3.5L14 2H5a2 2 0 00-2 2v14a2 2 0 002 2z"
-                ></path></svg
-              >
-              <I18n en="Download CV" tr="CV'yi İndir" />
-            </a>
+            <a class="btn" href={SITE.huggingface} target="_blank" rel="noopener noreferrer">Hugging Face</a>
           </div>
         </div>
+        <figure class="hero-portrait">
+          <img src={assetPath('assets/profile.jpg')} alt="Abdülaziz Öner" width="1254" height="1254" fetchpriority="high" />
+          <figcaption><I18n en="AI & Data Engineering student" tr="Yapay Zeka ve Veri Mühendisliği öğrencisi" /></figcaption>
+        </figure>
       </div>
     </section>
 
     <section id="about" class="section reveal" aria-labelledby="about-heading">
       <div class="container">
         <SectionHeader
-          icon="//"
+          icon="01"
           iconColor="var(--indigo)"
           titleEn="About"
           titleTr="Hakkında"
@@ -115,7 +107,7 @@ import { projects } from '@/data/projects';
     <section id="skills" class="section reveal" aria-labelledby="skills-heading">
       <div class="container">
         <SectionHeader
-          icon="⚡"
+          icon="02"
           iconColor="var(--blue)"
           titleEn="Skills"
           titleTr="Yetkinlikler"
@@ -129,27 +121,10 @@ import { projects } from '@/data/projects';
       </div>
     </section>
 
-    <section id="projects" class="section reveal" aria-labelledby="projects-heading">
-      <div class="container">
-        <SectionHeader
-          icon="#"
-          iconColor="var(--blue)"
-          titleEn="Projects"
-          titleTr="Projeler"
-          labelEn="selected work"
-          labelTr="seçili çalışmalar"
-          headingId="projects-heading"
-        />
-        <div class="projects-grid">
-          {projects.map((project) => <ProjectCard project={project} />)}
-        </div>
-      </div>
-    </section>
-
     <section id="education" class="section reveal" aria-labelledby="education-heading">
       <div class="container">
         <SectionHeader
-          icon="🎓"
+          icon="03"
           iconColor="var(--emerald)"
           titleEn="Education & Certificates"
           titleTr="Eğitim ve Sertifikalar"
@@ -164,7 +139,7 @@ import { projects } from '@/data/projects';
                 <h3>
                   <I18n en={item.title.en} tr={item.title.tr} />
                 </h3>
-                <p class="org">{item.org}</p>
+                <p class="org"><I18n en={item.org} tr={item.org === "Fırat University" ? "Fırat Üniversitesi" : item.org} /></p>
                 <p class="period">
                   <I18n en={item.period.en} tr={item.period.tr} />
                 </p>
@@ -181,10 +156,10 @@ import { projects } from '@/data/projects';
     <section id="focus" class="section reveal" aria-labelledby="focus-heading">
       <div class="container">
         <SectionHeader
-          icon="→"
+          icon="04"
           iconColor="var(--indigo)"
-          titleEn="Current Focus"
-          titleTr="Güncel Odak"
+          titleEn="Areas of Interest"
+          titleTr="İlgi Alanları"
           labelEn="learning priorities"
           labelTr="öğrenme öncelikleri"
           headingId="focus-heading"
@@ -201,6 +176,15 @@ import { projects } from '@/data/projects';
             ))
           }
         </div>
+      </div>
+    </section>
+    <section id="contact" class="section" aria-labelledby="contact-heading">
+      <div class="container contact-panel">
+        <div>
+          <h2 id="contact-heading"><I18n en="Get in touch" tr="İletişime geçelim" /></h2>
+          <p><I18n en="For internships, early-career opportunities or a conversation about AI and data, you can reach me by email or LinkedIn." tr="Staj, kariyer fırsatları veya yapay zeka ve veri üzerine konuşmak için e-posta ya da LinkedIn üzerinden ulaşabilirsiniz." /></p>
+        </div>
+        <a class="btn btn-primary" href={SITE.email}>abdulazizoner@gmail.com ↗</a>
       </div>
     </section>
   </main>
