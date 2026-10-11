@@ -10,17 +10,15 @@ export const SITE = {
 
 export const navLinks = [
   { id: "about", en: "About", tr: "Hakkında" },
-  { id: "skills", en: "Skills", tr: "Yetkinlikler" },
+  {
+    id: "skills",
+    en: "Skills & Interests",
+    tr: "Yetkinlikler ve İlgi Alanları",
+  },
   { id: "education", en: "Education", tr: "Eğitim" },
-  { id: "focus", en: "Interests", tr: "İlgi alanları" },
-  { id: "contact", en: "Contact", tr: "İletişim" },
 ] as const;
 
 export const hero = {
-  badge: {
-    en: "Elazığ, Türkiye · Open to internships",
-    tr: "Elazığ, Türkiye · Staj fırsatlarına açık",
-  },
   title: {
     en: "Artificial Intelligence & Data Engineering",
     tr: "Yapay Zeka ve Veri Mühendisliği",
@@ -60,12 +58,17 @@ export const about = {
 export type SkillCard = {
   variant?: "emerald" | "indigo" | "amber";
   title: { en: string; tr: string };
+  description: { en: string; tr: string };
   items: Array<string | { en: string; tr: string }>;
 };
 
 export const skills: SkillCard[] = [
   {
     title: { en: "Programming & Data", tr: "Programlama ve Veri" },
+    description: {
+      en: "I use Python and SQL to collect, clean and explore data, and C to develop my programming foundations.",
+      tr: "Python ve SQL ile veri toplama, temizleme ve keşif analizi üzerine çalışıyorum. C ile programlama temellerimi geliştiriyorum.",
+    },
     items: [
       "Python",
       "SQL",
@@ -78,6 +81,10 @@ export const skills: SkillCard[] = [
   {
     variant: "emerald",
     title: { en: "AI / ML", tr: "YZ / ML" },
+    description: {
+      en: "I work on Turkish text classification and sentiment analysis. My learning priorities include source-grounded language models and evaluating their responses.",
+      tr: "Türkçe metin sınıflandırma ve duygu analizi üzerine çalışıyorum. Kaynaklara dayalı dil modelleri ve yanıtlarının değerlendirilmesi öğrenme önceliklerim arasında.",
+    },
     items: [
       "NLP",
       { en: "Text classification", tr: "Metin sınıflandırma" },
@@ -92,6 +99,10 @@ export const skills: SkillCard[] = [
       en: "Data Engineering Fundamentals",
       tr: "Veri Mühendisliği Temelleri",
     },
+    description: {
+      en: "I am developing my understanding of data ingestion, metadata and search, including vector-based retrieval for document-grounded applications.",
+      tr: "Veri alma, üst veri düzenleme ve arama konularında kendimi geliştiriyorum. Belgeye dayalı uygulamalarda vektör tabanlı bilgi erişimine ilgi duyuyorum.",
+    },
     items: [
       { en: "Data ingestion", tr: "Veri alma" },
       { en: "Metadata organization", tr: "Üst veri düzenleme" },
@@ -105,6 +116,10 @@ export const skills: SkillCard[] = [
       en: "Analytics & Visualization",
       tr: "Analitik ve Görselleştirme",
     },
+    description: {
+      en: "I use SQL and visualization tools to examine performance indicators and communicate findings. My training covered KPI analysis and A/B testing.",
+      tr: "Performans göstergelerini incelemek ve bulguları aktarmak için SQL ve görselleştirme araçlarını kullanıyorum. Eğitimimde KPI analizi ve A/B testleri üzerine çalıştım.",
+    },
     items: [
       { en: "KPI analysis", tr: "KPI analizi" },
       { en: "A/B testing", tr: "A/B test" },
@@ -115,12 +130,33 @@ export const skills: SkillCard[] = [
   },
   {
     title: { en: "Tools", tr: "Araçlar" },
+    description: {
+      en: "I use Git for version control and Jupyter for exploration. I focus on reproducible environments, clear documentation and testing.",
+      tr: "Sürüm kontrolünde Git, veri keşfinde Jupyter kullanıyorum. Tekrarlanabilir çalışma ortamlarına, açık dokümantasyona ve testlere önem veriyorum.",
+    },
     items: [
       "Jupyter",
       "Poetry / pip",
       { en: "Docker basics", tr: "Docker temelleri" },
       { en: "Markdown docs", tr: "Markdown dokümantasyon" },
       { en: "Static deployment", tr: "Statik dağıtım" },
+    ],
+  },
+  {
+    title: {
+      en: "Web Development & Publishing",
+      tr: "Web Geliştirme ve Yayınlama",
+    },
+    description: {
+      en: "I build and publish websites with HTML, CSS and JavaScript. I am improving my practice in responsive design, accessibility and browser testing.",
+      tr: "HTML, CSS ve JavaScript ile web siteleri geliştirip yayımlıyorum. Mobil uyum, erişilebilirlik ve tarayıcı testleri konusunda deneyimimi artırıyorum.",
+    },
+    items: [
+      "HTML / CSS",
+      "JavaScript",
+      "Astro",
+      "GitHub Pages",
+      { en: "Responsive design", tr: "Mobil uyumlu tasarım" },
     ],
   },
 ];
@@ -148,27 +184,3 @@ export const education = [
     },
   },
 ] as const;
-
-export const focusItems = [
-  {
-    en: "Source-grounded AI systems and retrieval quality",
-    tr: "Kaynak temelli YZ sistemleri ve bilgi erişiminin kalitesi",
-  },
-  {
-    en: "NLP pipelines for Turkish text",
-    tr: "Türkçe metin için doğal dil işleme",
-  },
-  {
-    en: "Data ingestion, organization, and metadata design",
-    tr: "Veri alma, organizasyon ve metadata tasarımı",
-  },
-  {
-    en: "Clean documentation and deployment practices",
-    tr: "Temiz dokümantasyon ve dağıtım pratikleri",
-  },
-] as const;
-
-export const footerTagline = {
-  en: "Artificial Intelligence & Data Engineering",
-  tr: "Yapay Zeka ve Veri Mühendisliği",
-} as const;

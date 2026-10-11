@@ -14,6 +14,7 @@ const variantClass = card.variant ? card.variant : '';
   <h3>
     <I18n en={card.title.en} tr={card.title.tr} />
   </h3>
+  <p class="skill-description"><I18n en={card.description.en} tr={card.description.tr} /></p>
   <div class="skill-tags">
     {
       card.items.map((item) =>
